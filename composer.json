@@ -1,0 +1,31 @@
+{
+    "name": "sixty-nine/php-cloud-lib",
+    "description": "Library to generate word clouds in PHP",
+    "type": "library",
+    "keywords": ["cloud"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Daniele Barsotti",
+            "email": "sixtynine.db@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "SixtyNine\\Cloud\\": "src/SixtyNine/Cloud"
+        }
+    },
+    "require": {
+        "php": ">=5.3.9",
+        "doctrine/collections": "^1.4",
+        "jms/serializer": "^1.2",
+        "imagine/imagine": "~0.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    },
+    "config": {
+        "bin-dir": "bin"
+    }
+}
