@@ -104,6 +104,14 @@ class FiltersBuilder
     }
 
     /**
+     * @return string[]
+     */
+    public function getAllowedCase()
+    {
+        return $this->allowedCase;
+    }
+
+    /**
      * @return Filters
      */
     public function build()

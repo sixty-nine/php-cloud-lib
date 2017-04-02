@@ -89,7 +89,7 @@ class CloudBuilder
 
     public function setPlacer($name)
     {
-        if (!array_key_exists($name, PlacerFactory::getInstance()->getPlacersNames())) {
+        if (!in_array($name, PlacerFactory::getInstance()->getPlacersNames())) {
             throw new \InvalidArgumentException('Placer not found: ' . $name);
         }
 

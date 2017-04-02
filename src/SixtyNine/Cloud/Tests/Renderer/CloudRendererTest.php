@@ -8,6 +8,7 @@ use SixtyNine\Cloud\Builder\PalettesBuilder;
 use SixtyNine\Cloud\Builder\WordsListBuilder;
 use SixtyNine\Cloud\Color\RandomColorGenerator;
 use SixtyNine\Cloud\Factory\FontsFactory;
+use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 
 class CloudRendererTest extends \PHPUnit_Framework_TestCase
@@ -25,9 +26,14 @@ class CloudRendererTest extends \PHPUnit_Framework_TestCase
 
         $factory = FontsFactory::create(__DIR__ . '/../fixtures/fonts');
 
+        $placerName = 'Circular';
+        $placer = PlacerFactory::getInstance()->getPlacer($placerName, 800, 600);
+
         $cloud = CloudBuilder::create($factory)
             ->setBackgroundColor('#ffffff')
+            ->setDimension(800, 600)
             ->setFont('Arial.ttf')
+            ->setPlacer($placerName)
             ->useList($list)
             ->build()
         ;
@@ -35,7 +41,8 @@ class CloudRendererTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(3, $cloud->getWords());
 
         $renderer = new CloudRenderer();
-        $image = $renderer->render($cloud, $factory);
+        $image = $renderer->render($cloud, $factory, true);
+        $renderer->renderUsher($image, $placer, '#FFAA50');
 
         $this->assertInstanceOf(Image::class, $image);
 

@@ -167,7 +167,7 @@ class WordsList
     /**
      * @return int
      * @JMS\VirtualProperty
-     * @JMS\SerializedName("count")
+     * @JMS\SerializedName("max-count")
      */
     public function getWordsMaxCount()
     {
@@ -183,6 +183,8 @@ class WordsList
 
     /**
      * @return int
+     * @JMS\VirtualProperty
+     * @JMS\SerializedName("count")
      */
     public function getWordsCount()
     {
@@ -256,7 +258,7 @@ class WordsList
             }
         }
         $text = html_entity_decode(strip_tags($mock->saveHTML()));
-        $this->importWords($text, $maxWords, $filters);
+        $this->importWords($text, $filters, $maxWords);
     }
 
     /**
@@ -266,7 +268,7 @@ class WordsList
      */
     public function importUrl($url, Filters $filters = null, $maxWords = 100)
     {
-        $this->importHtml(file_get_contents($url), $maxWords, $filters);
+        $this->importHtml(file_get_contents($url), $filters, $maxWords);
     }
 
     /**

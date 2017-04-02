@@ -46,10 +46,10 @@ class PlacerFactory
         return $this->getPlacer('Circular', $imgWidth, $imgHeight);
     }
 
-    public function getPlacer($name, $imgWidth, $imgHeight)
+    public function getPlacer($name, $imgWidth, $imgHeight, $increment = 10)
     {
         $className = $this->getPlacerClass($name);
-        return new $className($imgWidth, $imgHeight);
+        return new $className($imgWidth, $imgHeight, $increment);
     }
 
     /**

@@ -56,7 +56,7 @@ class FontsFactory
      * @param string $color
      * @return ImagineFont
      */
-    public function getImagineFont($name, $size, $color)
+    public function getImagineFont($name, $size, $color = '#000000')
     {
         $font = $this->getFont($name);
         return new ImagineFont($font->getFile(), $size, new Color($color));

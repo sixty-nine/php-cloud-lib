@@ -1,3 +1,4 @@
 vendor/
-bin/
+bin/*
+!bin/cloud
 composer.lock
