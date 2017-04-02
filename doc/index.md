@@ -1,4 +1,12 @@
+# About
+
+For the time, the better documentation resides in reading the code.
+
+Here are few pointers.
+
 # Filters
+
+Filters allow to change or filters out words when the words are inserted in a `WordsList`.
 
 ```php
 /** @var \SixtyNine\Cloud\Filters\Filters $filters */
@@ -13,7 +21,11 @@ $filters = FiltersBuilder::create()
 ;
 ```
 
-# Words lists
+# WordsList
+
+A list of words contains the words to draw on the cloud along with their number of occurrences, color and, orientation.
+
+The `WordsListBuilder` allows to create a list of words from some random text or from a URL.
 
 ```php
 $list = WordsListBuilder::create()
@@ -34,6 +46,8 @@ $list = WordsListBuilder::create()
 
 # Cloud
 
+A cloud contains the words from a `WordsList` already placed and ready to be drawn.
+
 ```php
 $factory = FontsFactory::create('/path/to/my/ttf/fonts');
 
@@ -52,7 +66,11 @@ $cloud = CloudBuilder::create($factory)
 ;
 ```
 
-# Rendering a cloud
+# Rendering a cloud with Imagine
+
+The cloud renderer draws the cloud on an Imagine image and return it.
+
+You can then manipulate the `Imagine\Gd\Image` as you wish.
 
 ```php
 $factory = FontsFactory::create('/path/to/my/ttf/fonts');
@@ -64,6 +82,8 @@ $image->save('/tmp/image.png');
 ```
 
 # Serialization
+
+This component allows to save lists and clouds to JSON and load them (experimental) from appropriate JSON.
 
 ## Lists
 
@@ -77,32 +97,6 @@ $serializer = new Serializer();
 $list = $serializer->loadList($json);
 ```
 
-```json
-{
-    "name": "foobar",
-    "words": [
-        {
-            "text": "foobar",
-            "count": 1,
-            "orientation": "vertical",
-            "color": "#9452f3"
-        },
-        {
-            "text": "foo",
-            "count": 2,
-            "orientation": "vertical",
-            "color": "#923a24"
-        },
-        {
-            "text": "bar",
-            "count": 1,
-            "orientation": "vertical",
-            "color": "#1ea9de"
-        }
-    ]
-}
-```
-
 ## Clouds
 
 ```php
@@ -113,60 +107,4 @@ $json = $serializer->saveCloud($cloud, true);
 ```php
 $serializer = new Serializer();
 $list = $serializer->loadCloud($json);
-```
-
-```json
-{
-    "background_color": "#000000",
-    "width": 800,
-    "height": 600,
-    "font": "Arial.ttf",
-    "words": [
-        {
-            "size": 60,
-            "angle": 0,
-            "color": "#894264",
-            "text": "foo",
-            "position": [
-                266,
-                300
-            ],
-            "box": [
-                112,
-                61
-            ],
-            "is_visible": true
-        },
-        {
-            "size": 35,
-            "angle": 0,
-            "color": "#41b9e1",
-            "text": "bar",
-            "position": [
-                256,
-                263
-            ],
-            "box": [
-                68,
-                36
-            ],
-            "is_visible": true
-        },
-        {
-            "size": 35,
-            "angle": 270,
-            "color": "#350afc",
-            "text": "foobar",
-            "position": [
-                342,
-                495
-            ],
-            "box": [
-                36,
-                134
-            ],
-            "is_visible": true
-        }
-    ]
-}
 ```

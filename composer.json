@@ -1,6 +1,6 @@
 {
     "name": "sixty-nine/php-cloud-lib",
-    "description": "Library to generate word clouds in PHP",
+    "description": "A library to generate words clouds in PHP",
     "type": "library",
     "keywords": ["cloud"],
     "license": "MIT",
