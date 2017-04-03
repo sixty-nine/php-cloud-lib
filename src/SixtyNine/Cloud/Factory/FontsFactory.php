@@ -25,6 +25,10 @@ class FontsFactory
 
     public  static function create($fontsPath)
     {
+        if (!file_exists($fontsPath)) {
+            throw new \InvalidArgumentException('The fonts path must exist');
+        }
+
         return new self($fontsPath);
     }
 

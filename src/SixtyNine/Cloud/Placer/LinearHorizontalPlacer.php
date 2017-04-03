@@ -23,7 +23,7 @@ class LinearHorizontalPlacer extends AbstractPlacer
         }
 
         if ($current->getY() < $this->imgHeight) {
-            return new Point(0, $current->getY() + $this->$increment);
+            return new Point(0, $current->getY() + $this->increment);
         }
 
         return false;

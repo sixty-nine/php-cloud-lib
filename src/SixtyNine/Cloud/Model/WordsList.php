@@ -141,16 +141,19 @@ class WordsList
         }
 
         $sorter = function ($a, $b) use ($sortBy, $sortOrder) {
-            $method = 'get' . ucfirst($sortBy);
+            $method = $sortBy === self::SORT_ANGLE
+                ? 'getOrientation'
+                : 'get' . ucfirst($sortBy)
+            ;
 
             $attr1 = $a->$method();
             $attr2 = $b->$method();
 
             if ($sortOrder === self::SORT_ASC) {
-                return $attr1 < $attr2;
+                return $attr1 > $attr2;
             }
 
-            return $attr1 > $attr2;
+            return $attr1 < $attr2;
         };
 
 

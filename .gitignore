@@ -1,4 +1,5 @@
 vendor/
+fonts/
 bin/*
-!bin/cloud
+!bin/clouder
 composer.lock

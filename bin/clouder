@@ -1,11 +1,13 @@
 #!/usr/bin/env php
 <?php
 
+define('BASE_PATH', realpath(__DIR__ . '/../'));
+
 require __DIR__.'/../vendor/autoload.php';
 
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Component\Console\Application;
-use SixtyNine\Cloud\Command\ImportUrlCommand;
+use SixtyNine\Cloud\Command;
 
 AnnotationRegistry::registerAutoloadNamespace(
     'JMS\Serializer\Annotation',
@@ -14,6 +16,9 @@ AnnotationRegistry::registerAutoloadNamespace(
 
 $application = new Application();
 
-$application->add(new ImportUrlCommand());
+$application->add(new Command\BuildFromUrlCommand());
+$application->add(new Command\ListFontsCommand());
+$application->add(new Command\ListPalettesCommand());
+$application->add(new Command\ListPlacersCommand());
 
 $application->run();

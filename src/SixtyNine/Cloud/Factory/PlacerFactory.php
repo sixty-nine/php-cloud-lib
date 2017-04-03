@@ -13,17 +13,24 @@ use SixtyNine\Cloud\Placer\WordlePlacer;
 
 class PlacerFactory
 {
+    const PLACER_CIRCULAR = 'circular';
+    const PLACER_WORDLE = 'wordle';
+    const PLACER_SPIRANGLE = 'spirangle';
+    const PLACER_LINEAR_H = 'linear-h';
+    const PLACER_LINEAR_V = 'linear-v';
+    const PLACER_LISSAJOU = 'lissajou';
+
     /** @var PlacerFactory */
     protected static $instance;
 
     /** @var array */
     protected $placers = array(
-        'Circular' => CircularPlacer::class,
-        'Wordle' => WordlePlacer::class,
-        'Spirangle' => SpiranglePlacer::class,
-        'Linear Horizontal' => LinearHorizontalPlacer::class,
-        'Linear Vertical' => LinearVerticalPlacer::class,
-        'Lissajou' => LissajouPlacer::class,
+        self::PLACER_CIRCULAR => CircularPlacer::class,
+        self::PLACER_WORDLE => WordlePlacer::class,
+        self::PLACER_SPIRANGLE => SpiranglePlacer::class,
+        self::PLACER_LINEAR_H => LinearHorizontalPlacer::class,
+        self::PLACER_LINEAR_V => LinearVerticalPlacer::class,
+        self::PLACER_LISSAJOU => LissajouPlacer::class,
     );
 
     protected function __construct() { }
@@ -43,7 +50,7 @@ class PlacerFactory
 
     public function getDefaultPlacer($imgWidth, $imgHeight)
     {
-        return $this->getPlacer('Circular', $imgWidth, $imgHeight);
+        return $this->getPlacer(self::PLACER_CIRCULAR, $imgWidth, $imgHeight);
     }
 
     public function getPlacer($name, $imgWidth, $imgHeight, $increment = 10)

@@ -12,7 +12,7 @@ class RemoveTrailingCharacters extends AbstractFilter implements FilterInterface
     /**
      * @param string[] $punctuation Array of punctuation to be removed.
      */
-    public function __construct($punctuation = array('.', ',', ';', '?', '!'))
+    public function __construct($punctuation = array('.', ',', ';', '?', '!', '{' , '}', '[', ']'))
     {
         $this->punctuation = $punctuation;
     }

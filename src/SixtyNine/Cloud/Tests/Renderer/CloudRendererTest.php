@@ -39,7 +39,7 @@ EOF
 
         $factory = FontsFactory::create(__DIR__ . '/../fixtures/fonts');
 
-        $placerName = 'Circular';
+        $placerName = PlacerFactory::PLACER_CIRCULAR;
         $placer = PlacerFactory::getInstance()->getPlacer($placerName, 800, 600);
 
         $cloud = CloudBuilder::create($factory)
