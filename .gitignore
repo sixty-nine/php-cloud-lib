@@ -1,5 +1,6 @@
 vendor/
-fonts/
+fonts/*
+!fonts/.gitkeep
 bin/*
 !bin/clouder
 composer.lock
