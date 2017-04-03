@@ -23,6 +23,6 @@ class UsherTest extends \PHPUnit_Framework_TestCase
         $place2 = $usher->getPlace('foobar', 'Arial.ttf', 12, 90);
         // Assert the second word is placed on the right of the first word
         $this->assertEquals(0, $place2->getY());
-        $this->assertTrue($place1->getWidth() < $place2->getX());
+        $this->assertTrue($place1->getWidth() <= $place2->getX());
     }
 }
