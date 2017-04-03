@@ -93,6 +93,8 @@ class Usher
             $currentBox = $box->move($current->getX(), $current->getY());
             $place_found = !$this->mask->overlaps($currentBox);
 
+            $place_found = $place_found &&  $currentBox->inside($bounds);
+
             if ($place_found) {
                 break;
             }
