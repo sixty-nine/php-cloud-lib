@@ -76,11 +76,11 @@ class Usher
      */
     protected function searchPlace(Box $bounds, Box $box)
     {
-        $place_found = false;
+        $placeFound = false;
         $current = $this->placer->getFirstPlaceToTry();
         $curTry = 1;
 
-        while (!$place_found) {
+        while (!$placeFound) {
 
             if (!$current) {
                 return false;
@@ -91,11 +91,11 @@ class Usher
             }
 
             $currentBox = $box->move($current->getX(), $current->getY());
-            $place_found = !$this->mask->overlaps($currentBox);
+            $placeFound = !$this->mask->overlaps($currentBox);
 
-            $place_found = $place_found &&  $currentBox->inside($bounds);
+            $placeFound = $placeFound &&  $currentBox->inside($bounds);
 
-            if ($place_found) {
+            if ($placeFound) {
                 break;
             }
 
