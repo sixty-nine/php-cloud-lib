@@ -21,6 +21,7 @@ $commands = array(
     new Command\ListFontsCommand(),
     new Command\ListPalettesCommand(),
     new Command\ListPlacersCommand(),
+    new Command\DebugUsherCommand(),
 );
 
 foreach ($commands as $command) {

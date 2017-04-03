@@ -63,3 +63,18 @@ List the words placers that can be used.
 ```bash
 bin/clouder list:placers
 ```
+
+## Debug placers
+
+To help debug the implementation of new words placers, this command generates an image that shows the path a word placer
+uses.
+
+```bash
+debug:usher <placer>
+      --width[=WIDTH]                        # Width of the image [default: 800]
+      --height[=HEIGHT]                      # Height of the image [default: 600]
+      --color[=COLOR]                        # Color of the path [default: "#FF0000"]
+      --background-color[=BACKGROUND-COLOR]  # Background color of the cloud [default: "#FFFFFF"]
+      --save-to-file[=SAVE-TO-FILE]          # If set to a file name, the output will be saved there
+      --format[=FORMAT]                      # Output format (gif, jpeg, png) [default: "png"]
+```
