@@ -16,9 +16,15 @@ AnnotationRegistry::registerAutoloadNamespace(
 
 $application = new Application();
 
-$application->add(new Command\BuildFromUrlCommand());
-$application->add(new Command\ListFontsCommand());
-$application->add(new Command\ListPalettesCommand());
-$application->add(new Command\ListPlacersCommand());
+$commands = array(
+    new Command\BuildFromUrlCommand(),
+    new Command\ListFontsCommand(),
+    new Command\ListPalettesCommand(),
+    new Command\ListPlacersCommand(),
+);
+
+foreach ($commands as $command) {
+    $application->add($command);
+}
 
 $application->run();
