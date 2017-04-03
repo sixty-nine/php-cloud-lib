@@ -4,6 +4,7 @@
 namespace SixtyNine\Cloud\Tests\Filters;
 
 
+use SixtyNine\Cloud\Filters\ChangeCase;
 use SixtyNine\Cloud\Filters\FilterInterface;
 use SixtyNine\Cloud\Filters\Filters;
 use SixtyNine\Cloud\Filters\RemoveCharacters;
@@ -29,6 +30,9 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
     public function wordsProvider()
     {
         return array(
+            [new ChangeCase(ChangeCase::LOWERCASE), 'foobar', true, 'foobar'],
+            [new ChangeCase(ChangeCase::UPPERCASE), 'foobar', true, 'FOOBAR'],
+            [new ChangeCase(ChangeCase::UCFIRST), 'foobar', true, 'Foobar'],
             [new RemoveWords(array('and')), 'foobar', true],
             [new RemoveWords(array('and')), 'and', false],
             [new RemoveNumbers(), '1234abcd5678', true, 'abcd'],
