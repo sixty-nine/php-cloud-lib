@@ -2,26 +2,27 @@
 
 namespace SixtyNine\Cloud\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class BuildFromUrlCommand extends BaseCloudCommand
+class BuildFromFileCommand extends BaseCloudCommand
 {
     protected function configure()
     {
         parent::configure();
         $this
-            ->setName('cloud:from-url')
-            ->setDescription('Create a cloud from a URL')
-            ->addArgument('url', InputArgument::REQUIRED, 'The URL for the words')
+            ->setName('cloud:from-file')
+            ->setDescription('Create a cloud from the words in a file')
+            ->addArgument('file', InputArgument::REQUIRED, 'The path to the file containing the words')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new CommandsHelper();
-        $helper->createCloud('from-url', $input);
+        $helper->createCloud('from-file', $input);
     }
 }

@@ -3,7 +3,10 @@
 namespace SixtyNine\Cloud\Command;
 
 use Imagine\Image\ImageInterface;
+use SixtyNine\Cloud\Builder\CloudBuilder;
+use SixtyNine\Cloud\Builder\FiltersBuilder;
 use SixtyNine\Cloud\Builder\PalettesBuilder;
+use SixtyNine\Cloud\Builder\WordsListBuilder;
 use SixtyNine\Cloud\Color\ColorGeneratorInterface;
 use SixtyNine\Cloud\Color\RandomColorGenerator;
 use SixtyNine\Cloud\Color\RotateColorGenerator;
@@ -14,6 +17,8 @@ use SixtyNine\Cloud\FontSize\DimFontSizeGenerator;
 use SixtyNine\Cloud\FontSize\FontSizeGeneratorInterface;
 use SixtyNine\Cloud\FontSize\LinearFontSizeGenerator;
 use SixtyNine\Cloud\Placer\PlacerInterface;
+use SixtyNine\Cloud\Renderer\CloudRenderer;
+use Symfony\Component\Console\Input\InputInterface;
 
 class CommandsHelper
 {
@@ -135,5 +140,139 @@ class CommandsHelper
         }
 
         echo $image->get($outputFormat);
+    }
+
+    /**
+     * @param CloudBuilder $cloudBuilder
+     * @param FontsFactory $factory
+     * @param PlacerInterface $placer
+     * @param bool $renderBoxes
+     * @return \Imagine\Gd\Image|ImageInterface
+     */
+    protected function render(CloudBuilder $cloudBuilder, FontsFactory $factory, PlacerInterface $placer = null, $renderBoxes = false)
+    {
+        $renderer = new CloudRenderer();
+        $image = $renderer->render($cloudBuilder->build(), $factory, $renderBoxes);
+
+        if ($placer) {
+            $renderer->renderUsher($image, $placer, '#FF0000');
+        }
+
+        return $image;
+    }
+
+    public function getFilterBuilder(
+        $minWordLength,
+        $maxWordLength,
+        $changeCase = null,
+        $noRemoveNumbers = false,
+        $noRemoveUnwanted = false,
+        $noRemoveTrailing = false
+    ) {
+        $filtersBuilder = FiltersBuilder::create()
+            ->setMinLength($minWordLength)
+            ->setMaxLength($maxWordLength)
+            ->setRemoveNumbers(!$noRemoveNumbers)
+            ->setRemoveUnwanted(!$noRemoveTrailing)
+            ->setRemoveTrailing(!$noRemoveUnwanted)
+        ;
+
+        if ($changeCase && in_array($changeCase, $filtersBuilder->getAllowedCase())) {
+            $filtersBuilder->setCase($changeCase);
+        }
+
+        return $filtersBuilder;
+    }
+
+    public function createCloud($type, InputInterface $input)
+    {
+        if (!in_array($type, array('from-url', 'from-file'))) {
+            throw new \InvalidArgumentException('Invalid type for createCloud: ' . $type);
+        }
+
+        // Build the filters
+        $filtersBuilder = $this->getFilterBuilder(
+            $input->getOption('min-word-length'),
+            $input->getOption('max-word-length'),
+            $input->getOption('case'),
+            $input->getOption('no-remove-numbers'),
+            $input->getOption('no-remove-unwanted'),
+            $input->getOption('no-remove-trailing')
+        );
+
+        // Create a placer
+        $placerName = $this->getPlacer($input->getOption('placer'));
+        $placer = PlacerFactory::getInstance()->getPlacer(
+            $placerName,
+            $input->getOption('width'),
+            $input->getOption('height')
+        );
+
+        // Get the font file
+        $fontsPath = $input->getOption('fonts-path')
+            ? realpath($input->getOption('fonts-path'))
+            : constant('BASE_PATH') . '/fonts'
+        ;
+        $factory = FontsFactory::create($fontsPath);
+        $font = $this->getFont($factory, $input->getOption('font'));
+
+        // Create the list builder
+        $listBuilder = WordsListBuilder::create()
+            ->setMaxWords($input->getOption('max-word-count'))
+            ->setFilters($filtersBuilder->build())
+            ->randomizeOrientation($input->getOption('vertical-probability'))
+        ;
+
+        if ($type === 'from-file') {
+            $file = $input->getArgument('file');
+            if (!file_exists($file)) {
+                throw new \InvalidArgumentException('File not found: ' . $file);
+            }
+            $listBuilder->importWords(file_get_contents($file));
+        } else {
+            $listBuilder->importUrl($input->getArgument('url'));
+        }
+
+        $sortBy = $input->getOption('sort-by');
+        $sortOrder = $input->getOption('sort-order');
+
+        if ($sortBy && $sortOrder) {
+            $listBuilder->sort($sortBy, $sortOrder);
+        }
+
+        // Apply a color generator if needed
+        $colorGenerator = $this->getColorGenerator(
+            $input->getOption('palette'),
+            $input->getOption('palette-type'),
+            $input->getOption('palettes-file')
+        );
+
+        if ($colorGenerator) {
+            $listBuilder->randomizeColors($colorGenerator);
+        }
+
+        // Build the list
+        $list = $listBuilder->build('list');
+
+        // Create a cloud builder
+        $cloudBuilder = CloudBuilder::create($factory)
+            ->setBackgroundColor($input->getOption('background-color'))
+            ->setDimension($input->getOption('width'), $input->getOption('height'))
+            ->setFont($font)
+            ->setFontSizes($input->getOption('min-font-size'), $input->getOption('max-font-size'))
+            ->setPlacer($placerName)
+            ->setSizeGenerator($this->getFontSizeGenerator($input->getOption('font-size-boost')))
+            ->useList($list)
+        ;
+
+        // Render the cloud and show the bounding boxes and the usher if needed
+        $image = $this->render(
+            $cloudBuilder,
+            $factory,
+            $input->getOption('render-usher') ? $placer : null,
+            $input->getOption('render-boxes')
+        );
+
+        $this->output($image, $input->getOption('format'), $input->getOption('save-to-file'));
     }
 }

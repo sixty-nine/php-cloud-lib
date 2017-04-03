@@ -18,6 +18,7 @@ $application = new Application();
 
 $commands = array(
     new Command\BuildFromUrlCommand(),
+    new Command\BuildFromFileCommand(),
     new Command\ListFontsCommand(),
     new Command\ListPalettesCommand(),
     new Command\ListPlacersCommand(),
