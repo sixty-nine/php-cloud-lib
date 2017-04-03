@@ -184,6 +184,11 @@ class CommandsHelper
         return $filtersBuilder;
     }
 
+    /**
+     * @param string $type
+     * @param InputInterface $input
+     * @throws \InvalidArgumentException
+     */
     public function createCloud($type, InputInterface $input)
     {
         if (!in_array($type, array('from-url', 'from-file'))) {

@@ -11,11 +11,11 @@ composer require sixty-nine/php-cloud-lib dev-master
 
 ## Usage
 
-See [Documentation](https://github.com/sixty-nine/php-cloud-lib/blob/master/doc/index.md)
+See [Documentation](https://github.com/sixty-nine/php-cloud-lib/wiki)
 
 ## Example
 
-![Cloud example](https://github.com/sixty-nine/php-cloud-lib/blob/master/doc/assets/cloud.png)
+![Cloud example](https://github.com/sixty-nine/php-cloud-lib/wiki/assets/cloud.png)
 
 ### License
 
