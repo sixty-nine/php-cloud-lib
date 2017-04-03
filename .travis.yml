@@ -6,4 +6,4 @@ php:
 before_script:
   - composer install
 
-script: phpunit -c tests/
+script: bin/phpunit -c tests/
