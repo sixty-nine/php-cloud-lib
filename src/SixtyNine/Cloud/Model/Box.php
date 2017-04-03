@@ -168,5 +168,10 @@ class Box
     {
         return new \Imagine\Image\Box($this->getWidth(), $this->getHeight());
     }
+
+    function __toString()
+    {
+        return sprintf('Box[(%s, %s) x (%s, %s)]', $this->x, $this->y, $this->width, $this->height);
+    }
 }
 
