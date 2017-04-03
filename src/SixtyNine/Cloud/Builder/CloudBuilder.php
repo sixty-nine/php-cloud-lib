@@ -6,8 +6,10 @@ use Imagine\Image\Color;
 use Imagine\Image\Point;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
+use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\FontSize\FontSizeGeneratorInterface;
 use SixtyNine\Cloud\FontSize\LinearFontSizeGenerator;
+use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Model\CloudWord;
 use SixtyNine\Cloud\Model\Word;
@@ -159,20 +161,20 @@ class CloudBuilder
             : PlacerFactory::getInstance()->getDefaultPlacer($cloud->getWidth(), $cloud->getHeight())
         ;
 
-        $usher = new Usher($cloud->getWidth(), $cloud->getHeight(), $placer);
+        $metrics = new FontMetrics($this->fontsFactory);
+        $usher = new Usher($cloud->getWidth(), $cloud->getHeight(), $placer, $metrics);
 
         /** @var CloudWord $word */
         foreach ($cloud->getWords() as $word) {
-            $font = $this->fontsFactory->getImagineFont($cloud->getFont(), $word->getSize(), $word->getColor());
-            $box = $font->box($word->getText(), $word->getAngle());
-            $place = $usher->getPlace($box);
 
-            $word
-                ->setIsVisible((bool)$place)
-                ->setBox(array($box->getWidth(), $box->getHeight()))
-            ;
+            $place = $usher->getPlace($word->getText(), $cloud->getFont(), $word->getSize(), $word->getAngle());
+
+            $word->setIsVisible((bool)$place);
 
             if ($place) {
+
+                $box = $place->getDimensions();
+                $word->setBox(array($box->getWidth(), $box->getHeight()));
 
                 if ($word->getAngle() !== 0) {
                     $place = new Point(

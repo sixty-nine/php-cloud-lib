@@ -3,6 +3,7 @@
 namespace SixtyNine\Cloud\Model;
 
 use Imagine\Image\BoxInterface;
+use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
 
 /**
@@ -56,13 +57,36 @@ class Box
      * @param Box $box The other rectangle to test collision with
      * @return boolean True is the boxes collide, false otherwise
      */
-    function intersects(Box $box)
+    public function intersects(Box $box)
     {
-        return ($this->getLeft() < $box->getRight() &&
-           $this->getRight() > $box->getLeft() &&
-           $this->getTop() < $box->getBottom() &&
-           $this->getBottom() > $box->getTop())
-        ;
+        return ($this->getLeft() < $box->getRight()
+            && $this->getRight() > $box->getLeft()
+            && $this->getTop() < $box->getBottom()
+            && $this->getBottom() > $box->getTop()
+        );
+    }
+
+    /**
+     * @param Box $box
+     * @return bool
+     */
+    public function inside(Box $box)
+    {
+        return ($this->getLeft() >= $box->getLeft()
+            && $this->getRight() <= $box->getRight()
+            && $this->getTop() >= $box->getTop()
+            && $this->getBottom() <= $box->getBottom()
+        );
+    }
+
+    /**
+     * @param int $deltaX
+     * @param int $deltaY
+     * @return \SixtyNine\Cloud\Model\Box
+     */
+    public function move($deltaX, $deltaY)
+    {
+        return new self($this->getX() + $deltaX, $this->getY() + $deltaY, $this->getWidth(), $this->getHeight());
     }
 
     /**
@@ -127,6 +151,22 @@ class Box
     public function getY()
     {
         return $this->y;
+    }
+
+    /**
+     * @return Point
+     */
+    public function getPosition()
+    {
+        return new Point($this->getX(), $this->getY());
+    }
+
+    /**
+     * @return \Imagine\Image\Box
+     */
+    public function getDimensions()
+    {
+        return new \Imagine\Image\Box($this->getWidth(), $this->getHeight());
     }
 }
 

@@ -40,12 +40,21 @@ class CloudRenderer
             $pos = $word->getPosition();
             $box =$word->getBox();
 
-            $image->draw()->text(
-                $word->getText(),
-                $font,
-                new Point($pos[0], $pos[1]),
-                $angle
-            );
+            if ($angle === 0) {
+                $image->draw()->text(
+                    $word->getText(),
+                    $font,
+                    new Point($pos[0], $pos[1]),
+                    $angle
+                );
+            } else {
+                $image->draw()->text(
+                    $word->getText(),
+                    $font,
+                    new Point($pos[0], $pos[1] - $box[0]),
+                    $angle
+                );
+            }
 
             if ($drawBoundingBoxes) {
                 if ($word->getAngle() === 0) {
@@ -57,10 +66,10 @@ class CloudRenderer
                     );
                 } else {
                     $points = array(
-                        new Point($pos[0], $pos[1] + $box[0]),
-                        new Point($pos[0] - $box[0], $pos[1] + $box[0]),
-                        new Point($pos[0] - $box[0], $pos[1] - $box[1] + $box[0]),
-                        new Point($pos[0], $pos[1] - $box[1] + $box[0]),
+                        new Point($pos[0], $pos[1]),
+                        new Point($pos[0] - $box[0], $pos[1]),
+                        new Point($pos[0] - $box[0], $pos[1] - $box[1]),
+                        new Point($pos[0], $pos[1] - $box[1]),
                     );
                 }
                 $image->draw()->polygon($points, new Color(0xFF0000));

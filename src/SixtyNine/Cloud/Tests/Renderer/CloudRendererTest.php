@@ -4,6 +4,7 @@ namespace SixtyNine\Cloud\Tests\Renderer;
 
 use Imagine\Gd\Image;
 use SixtyNine\Cloud\Builder\CloudBuilder;
+use SixtyNine\Cloud\Builder\FiltersBuilder;
 use SixtyNine\Cloud\Builder\PalettesBuilder;
 use SixtyNine\Cloud\Builder\WordsListBuilder;
 use SixtyNine\Cloud\Color\RandomColorGenerator;
@@ -20,7 +21,19 @@ class CloudRendererTest extends \PHPUnit_Framework_TestCase
         $list = WordsListBuilder::create()
             ->randomizeOrientation(50)
             ->randomizeColors($colorGenerator)
-            ->importWords('foobar foo foo bar')
+            ->importWords(<<<EOF
+Algorithms to detect collision in 2D games depend on the type of shapes that can collide (e.g. Rectangle to Rectangle,
+Rectangle to Circle, Circle to Circle). Generally you will have a simple generic shape that covers the entity known as
+a "hitbox" so even though collision may not be pixel perfect, it will look good enough and be performant across multiple
+entities. This article provides a review of the most common techniques used to provide collision detection in 2D games.
+EOF
+            )
+            ->setFilters(FiltersBuilder::create()
+                ->setMinLength(5)
+                ->setMaxLength(10)
+                ->build()
+            )
+//            ->setMaxWords(30)
             ->build('foobar')
         ;
 
@@ -37,8 +50,6 @@ class CloudRendererTest extends \PHPUnit_Framework_TestCase
             ->useList($list)
             ->build()
         ;
-
-        $this->assertCount(3, $cloud->getWords());
 
         $renderer = new CloudRenderer();
         $image = $renderer->render($cloud, $factory, true);
