@@ -27,7 +27,7 @@ class CloudBuilder
     /** @var string */
     protected $font;
     /** @var string */
-    protected $backgroundColor = '#000000';
+    protected $backgroundColor = '#ffffff';
     /** @var FontSizeGeneratorInterface */
     protected $sizeGenerator;
     /** @var string */
