@@ -302,7 +302,7 @@ class WordsList
         /** @var \SixtyNine\CloudBundle\Entity\Word $word */
         foreach ($this->getWords() as $word) {
 
-            $orientation = random_int(0, 100) <= $verticalProbability
+            $orientation = random_int(0, 99) < $verticalProbability
                 ? Word::DIR_VERTICAL
                 : Word::DIR_HORIZONTAL
             ;

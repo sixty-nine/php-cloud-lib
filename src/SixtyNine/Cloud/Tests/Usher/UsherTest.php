@@ -20,9 +20,11 @@ class UsherTest extends \PHPUnit_Framework_TestCase
         // Assert the first word is positioned at (0,0)
         $this->assertEquals(new Point(0, 0), $place1->getPosition());
 
-        $place2 = $usher->getPlace('foobar', 'Arial.ttf', 12, 90);
+        $place2 = $usher->getPlace('foobar', 'Arial.ttf', 12, 90, false);
         // Assert the second word is placed on the right of the first word
         $this->assertEquals(0, $place2->getY());
-        $this->assertTrue($place1->getWidth() <= $place2->getX());
+        $this->assertTrue($place1->getWidth() <= $place2->getX(),
+            sprintf('Expected %s to be smaller or equals than %s', $place1->getWidth(), $place2->getX())
+        );
     }
 }

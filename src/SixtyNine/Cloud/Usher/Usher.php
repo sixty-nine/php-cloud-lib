@@ -2,6 +2,7 @@
 
 namespace SixtyNine\Cloud\Usher;
 
+use Imagine\Image\Point;
 use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Placer\PlacerInterface;
@@ -40,7 +41,6 @@ class Usher
         FontMetrics $metrics,
         $maxTries = self::DEFAULT_MAX_TRIES
     ) {
-//        $this->mask = new SimpleMask();
         $this->mask = new QuadTreeMask($imgWidth, $imgHeight);
         $this->metrics = $metrics;
         $this->imgHeight = $imgHeight;
@@ -56,18 +56,39 @@ class Usher
      * @param int $angle
      * @return bool|Box
      */
-    public function getPlace($word, $font, $size, $angle)
+    public function getPlace($word, $font, $size, $angle, $precise = true)
     {
         $bounds = new Box(0, 0, $this->imgWidth, $this->imgHeight);
         $box = $this->metrics->calculateSize($word, $font, $size, $angle);
         $place = $this->searchPlace($bounds, $box);
 
         if ($place) {
-            $this->mask->add($place->getPosition(), $box);
+            if ($precise) {
+                $this->addWordToMask($word, $place, $font, $size, $angle);
+            } else {
+                $this->mask->add($place->getPosition(), $box);
+            }
             return $place;
         }
 
         return false;
+    }
+
+    public function addWordToMask($word, Box $place, $font, $size, $angle)
+    {
+        $base = $this->metrics->calculateSize($word, $font, $size, $angle);
+        foreach (str_split($word) as $letter) {
+            $box = $this->metrics->calculateSize($letter, $font, $size, $angle);
+            $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
+            $this->mask->add($newPos, $box);
+
+            if ($angle === 0) {
+                $place = $place->move($box->getWidth(), 0);
+            } else {
+                // FIXME: this is wrong
+                $place = $place->move(0, $box->getHeight());
+            }
+        }
     }
 
     /**

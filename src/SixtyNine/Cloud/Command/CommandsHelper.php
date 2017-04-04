@@ -270,6 +270,10 @@ class CommandsHelper
             ->useList($list)
         ;
 
+        if ($input->getOption('precise')) {
+            $cloudBuilder->setPrecise();
+        }
+
         // Render the cloud and show the bounding boxes and the usher if needed
         $image = $this->render(
             $cloudBuilder,

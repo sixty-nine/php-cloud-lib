@@ -37,6 +37,8 @@ class CloudBuilder
     protected $maxFontSize = 60;
     /** @var FontsFactory */
     protected $fontsFactory;
+    /** @var bool */
+    protected $precise = false;
 
     protected function __construct(FontsFactory $fontsFactory)
     {
@@ -96,6 +98,11 @@ class CloudBuilder
 
         $this->placerName = $name;
         return $this;
+    }
+
+    public function setPrecise()
+    {
+        $this->precise = true;
     }
 
     public function useList(WordsList $list)
@@ -166,7 +173,7 @@ class CloudBuilder
         /** @var CloudWord $word */
         foreach ($cloud->getWords() as $word) {
 
-            $place = $usher->getPlace($word->getText(), $cloud->getFont(), $word->getSize(), $word->getAngle());
+            $place = $usher->getPlace($word->getText(), $cloud->getFont(), $word->getSize(), $word->getAngle(), $this->precise);
 
             $word->setIsVisible((bool)$place);
 
