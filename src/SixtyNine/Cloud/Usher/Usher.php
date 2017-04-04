@@ -1,7 +1,8 @@
 <?php
 
-namespace SixtyNine\Cloud;
+namespace SixtyNine\Cloud\Usher;
 
+use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Placer\PlacerInterface;
 
@@ -16,7 +17,7 @@ class Usher
     /** @var int */
     protected $maxTries;
 
-    /** @var \SixtyNine\Cloud\SimpleMask */
+    /** @var \SixtyNine\Cloud\Usher\MaskInterface */
     protected $mask;
 
     /** @var \SixtyNine\Cloud\Placer\PlacerInterface */
@@ -39,7 +40,8 @@ class Usher
         FontMetrics $metrics,
         $maxTries = self::DEFAULT_MAX_TRIES
     ) {
-        $this->mask = new SimpleMask();
+//        $this->mask = new SimpleMask();
+        $this->mask = new QuadTreeMask($imgWidth, $imgHeight);
         $this->metrics = $metrics;
         $this->imgHeight = $imgHeight;
         $this->imgWidth = $imgWidth;

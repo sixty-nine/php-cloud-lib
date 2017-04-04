@@ -203,8 +203,11 @@ class WordsList
     {
         $array = preg_split("/[\n\r\t ]+/", $words);
 
-        foreach (array_slice($array, 0, $maxWords) as $word) {
+        foreach ($array as $word) {
             $this->importWord($word, $filters);
+            if ($maxWords && $this->words->count() >= $maxWords) {
+                break;
+            }
         }
     }
 

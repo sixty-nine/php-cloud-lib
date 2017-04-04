@@ -1,18 +1,18 @@
 <?php
 
-namespace SixtyNine\Cloud\Tests\Renderer;
+namespace SixtyNine\Cloud\Tests\Usher;
 
 use Imagine\Image\Point;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
-use SixtyNine\Cloud\Usher;
+use SixtyNine\Cloud\Usher\Usher;
 
 class UsherTest extends \PHPUnit_Framework_TestCase
 {
-    public function testUsher()
+    public function testLinearUsher()
     {
-        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
+        $factory = FontsFactory::create(__DIR__ . '/../fixtures/fonts');
         $metrics = new FontMetrics($factory);
         $placer = PlacerFactory::getInstance()->getPlacer(PlacerFactory::PLACER_LINEAR_H, 800, 600, 5);
         $usher = new Usher(800, 600, $placer, $metrics);

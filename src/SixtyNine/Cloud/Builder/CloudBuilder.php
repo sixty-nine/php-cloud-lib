@@ -9,12 +9,11 @@ use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\FontSize\FontSizeGeneratorInterface;
 use SixtyNine\Cloud\FontSize\LinearFontSizeGenerator;
-use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Model\CloudWord;
 use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
-use SixtyNine\Cloud\Usher;
+use SixtyNine\Cloud\Usher\Usher;
 
 class CloudBuilder
 {

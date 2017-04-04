@@ -1,6 +1,6 @@
 <?php
 
-namespace SixtyNine\Cloud\Tests\Renderer;
+namespace SixtyNine\Cloud\Tests\Model;
 
 use Imagine\Gd\Image;
 use Imagine\Image\Point;
@@ -65,6 +65,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             array(new Box(1, 1, 1, 1), new Box(1, 1, 1, 1), true),
             array(new Box(10, 10, 100, 50), new Box(5, 5, 5, 50), false),
             array(new Box(10, 10, 100, 50), new Box(5, 5, 50, 50), true),
+            array(new Box(0, 10, 100, 10), new Box(10, 0, 10, 100), true),
         );
     }
 }

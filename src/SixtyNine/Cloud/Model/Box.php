@@ -89,6 +89,16 @@ class Box
         return new self($this->getX() + $deltaX, $this->getY() + $deltaY, $this->getWidth(), $this->getHeight());
     }
 
+    public function resize($count)
+    {
+        return new self(
+            $this->getX() - $count,
+            $this->getY() - $count,
+            $this->getWidth() + 2 * $count,
+            $this->getHeight() + 2 * $count
+        );
+    }
+
     /**
      * @return int
      */
@@ -171,7 +181,7 @@ class Box
 
     function __toString()
     {
-        return sprintf('Box[(%s, %s) x (%s, %s)]', $this->x, $this->y, $this->width, $this->height);
+        return sprintf('(%s, %s) x (%s, %s)', $this->x, $this->y, $this->width, $this->height);
     }
 }
 

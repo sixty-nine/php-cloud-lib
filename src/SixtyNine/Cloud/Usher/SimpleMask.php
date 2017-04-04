@@ -1,10 +1,9 @@
 <?php
 
-namespace SixtyNine\Cloud;
+namespace SixtyNine\Cloud\Usher;
 
 use Imagine\Image\PointInterface;
 use SixtyNine\Cloud\Model\Box;
-use SixtyNine\Cloud\Model\Word;
 
 class SimpleMask
 {
@@ -13,7 +12,7 @@ class SimpleMask
 
     /**
      * @param \Imagine\Image\PointInterface $position
-     * @param Model\Box $box
+     * @param Box $box
      */
     public function add(PointInterface $position, Box $box)
     {
