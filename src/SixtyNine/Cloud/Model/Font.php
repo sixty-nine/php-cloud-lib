@@ -13,12 +13,6 @@ class Font
     /** @var string */
     protected $file;
 
-    /** @var float */
-    protected $paddingSize;
-
-    /** @var int */
-    protected $paddingAngle;
-
     /**
      * Create a TTF font from the given $file.
      * @param string $name
@@ -69,37 +63,5 @@ class Font
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * @param int $paddingAngle
-     */
-    public function setPaddingAngle($paddingAngle)
-    {
-        $this->paddingAngle = $paddingAngle;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPaddingAngle()
-    {
-        return $this->paddingAngle;
-    }
-
-    /**
-     * @param float $paddingSize
-     */
-    public function setPaddingSize($paddingSize)
-    {
-        $this->paddingSize = $paddingSize;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPaddingSize()
-    {
-        return $this->paddingSize;
     }
 }

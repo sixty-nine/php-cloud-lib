@@ -16,6 +16,7 @@ class CloudRenderer
 {
     /**
      * @param Cloud $cloud
+     * @param \SixtyNine\Cloud\Factory\FontsFactory $fontsFactory
      * @param bool $drawBoundingBoxes
      * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
      */
