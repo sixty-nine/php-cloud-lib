@@ -38,7 +38,7 @@ class CloudWord
 
     /**
      * @var array
-     * @JMS\Type("array")
+     * @JMS\Type("SixtyNine\Cloud\Model\Box")
      */
     protected $box;
 

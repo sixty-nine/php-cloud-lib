@@ -3,6 +3,8 @@
 namespace SixtyNine\Cloud\Usher;
 
 use Imagine\Image\Point;
+use SixtyNine\Cloud\Drawer\Drawer;
+use SixtyNine\Cloud\Factory\Logger;
 use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Placer\PlacerInterface;
@@ -27,6 +29,9 @@ class Usher
     /** @var \SixtyNine\Cloud\FontMetrics */
     protected $metrics;
 
+    /** @var Logger */
+    protected $logger;
+
     /**
      * @param int $imgWidth
      * @param int $imgHeight
@@ -47,6 +52,7 @@ class Usher
         $this->imgWidth = $imgWidth;
         $this->maxTries = $maxTries;
         $this->placer = $placer;
+        $this->logger = Logger::getInstance();
     }
 
     /**
@@ -56,17 +62,32 @@ class Usher
      * @param int $angle
      * @return bool|Box
      */
-    public function getPlace($word, $font, $size, $angle, $precise = true)
+    public function getPlace($word, $font, $size, $angle, $precise = false)
     {
+        $this->logger->log(
+            sprintf(
+                'Search place for "%s", font = %s(%s), angle = %s',
+                $word,
+                str_replace('.ttf', '', $font),
+                $size,
+                $angle
+            ),
+            Logger::DEBUG
+        );
+
         $bounds = new Box(0, 0, $this->imgWidth, $this->imgHeight);
-        $box = $this->metrics->calculateSize($word, $font, $size, $angle);
+        $size = $this->metrics->calculateSize($word, $font, $size);
+        $box = Drawer::getBoxFoxText(0, 0, $size->getWidth(), $size->getHeight(), $angle);
+
+        $this->logger->log('  Text dimensions: ' . $size->getDimensions(), Logger::DEBUG);
+
         $place = $this->searchPlace($bounds, $box);
 
         if ($place) {
             if ($precise) {
                 $this->addWordToMask($word, $place, $font, $size, $angle);
             } else {
-                $this->mask->add($place->getPosition(), $box);
+                $this->mask->add(new Point(0, 0), $place, $angle);
             }
             return $place;
         }
@@ -78,9 +99,9 @@ class Usher
     {
         $base = $this->metrics->calculateSize($word, $font, $size, $angle);
         foreach (str_split($word) as $letter) {
-            $box = $this->metrics->calculateSize($letter, $font, $size, $angle);
+            $box = $this->metrics->calculateSize($letter, $font, $size);
             $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
-            $this->mask->add($newPos, $box);
+            $this->mask->add($newPos, $box, $angle);
 
             if ($angle === 0) {
                 $place = $place->move($box->getWidth(), 0);
@@ -99,6 +120,9 @@ class Usher
      */
     protected function searchPlace(Box $bounds, Box $box)
     {
+
+        $this->logger->log('  Search place for ' . $box, Logger::DEBUG);
+
         $placeFound = false;
         $current = $this->placer->getFirstPlaceToTry();
         $curTry = 1;
@@ -114,9 +138,19 @@ class Usher
             }
 
             $currentBox = $box->move($current->getX(), $current->getY());
-            $placeFound = !$this->mask->overlaps($currentBox);
 
-            $placeFound = $placeFound &&  $currentBox->inside($bounds);
+            $outOfBounds = !$currentBox->inside($bounds);
+
+            if (!$outOfBounds) {
+                $placeFound = !$this->mask->overlaps($currentBox);
+                $placeFound = $placeFound && !$outOfBounds;
+            }
+
+            $this->logger->log(sprintf(
+                '  Trying %s --> %s',
+                $currentBox,
+                $outOfBounds ? 'Out of bounds' : ($placeFound ? 'OK' : 'Collision')
+            ), Logger::DEBUG);
 
             if ($placeFound) {
                 break;
@@ -126,7 +160,11 @@ class Usher
             $curTry++;
         }
 
-        $currentBox = $box->move($current->getX(), $current->getY());
         return $currentBox->inside($bounds) ? $currentBox : false;
+    }
+
+    public function getMask()
+    {
+        return $this->mask;
     }
 }

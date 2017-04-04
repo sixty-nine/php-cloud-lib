@@ -8,6 +8,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Color;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
+use SixtyNine\Cloud\Drawer\Drawer;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Placer\PlacerInterface;
@@ -22,12 +23,10 @@ class CloudRenderer
      */
     public function render(Cloud $cloud, FontsFactory $fontsFactory, $drawBoundingBoxes = false)
     {
-        $imagine = new Imagine();
-        $size  = new Box($cloud->getWidth(), $cloud->getHeight());
-        $image = $imagine->create(
-            $size,
-            new Color($cloud->getBackgroundColor())
-        );
+        $drawer = Drawer::create($fontsFactory)
+            ->createImage($cloud->getWidth(), $cloud->getHeight(), $cloud->getBackgroundColor())
+            ->setFont($cloud->getFont())
+        ;
 
         /** @var \SixtyNine\Cloud\Model\CloudWord $word */
         foreach ($cloud->getWords() as $word) {
@@ -36,48 +35,21 @@ class CloudRenderer
                 continue;
             }
 
-            $font = $fontsFactory->getImagineFont($cloud->getFont(), $word->getSize(), $word->getColor());
-            $angle = $word->getAngle();
             $pos = $word->getPosition();
-            $box =$word->getBox();
+            $box = $word->getBox();
 
-            if ($angle === 0) {
-                $image->draw()->text(
-                    $word->getText(),
-                    $font,
-                    new Point($pos[0], $pos[1]),
-                    $angle
-                );
+            if ($word->getAngle() === 270) {
+                $drawer->drawText($pos[0] + $box->getWidth(), $pos[1] + $box->getHeight() - $word->getSize(), $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
             } else {
-                $image->draw()->text(
-                    $word->getText(),
-                    $font,
-                    new Point($pos[0], $pos[1] - $box[0]),
-                    $angle
-                );
+                $drawer->drawText($pos[0], $pos[1], $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
             }
 
             if ($drawBoundingBoxes) {
-                if ($word->getAngle() === 0) {
-                    $points = array(
-                        new Point($pos[0], $pos[1]),
-                        new Point($pos[0] + $box[0], $pos[1]),
-                        new Point($pos[0] + $box[0], $pos[1] + $box[1]),
-                        new Point($pos[0], $pos[1] + $box[1]),
-                    );
-                } else {
-                    $points = array(
-                        new Point($pos[0], $pos[1]),
-                        new Point($pos[0] - $box[0], $pos[1]),
-                        new Point($pos[0] - $box[0], $pos[1] - $box[1]),
-                        new Point($pos[0], $pos[1] - $box[1]),
-                    );
-                }
-                $image->draw()->polygon($points, new Color(0xFF0000));
+                $drawer->drawBox($box->getX(), $box->getY(), $box->getWidth(), $box->getHeight(), '#ff0000');
             }
         }
 
-        return $image;
+        return $drawer->getImage();
     }
 
     public function renderUsher(

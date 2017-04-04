@@ -178,17 +178,7 @@ class CloudBuilder
             $word->setIsVisible((bool)$place);
 
             if ($place) {
-
-                $box = $place->getDimensions();
-                $word->setBox(array($box->getWidth(), $box->getHeight()));
-
-                if ($word->getAngle() !== 0) {
-                    $place = new Point(
-                        $place->getX() + $box->getWidth(),
-                        $place->getY() + $box->getHeight()
-                    );
-                }
-
+                $word->setBox($place);
                 $word->setPosition(array((int)$place->getX(), (int)$place->getY()));
             }
         }

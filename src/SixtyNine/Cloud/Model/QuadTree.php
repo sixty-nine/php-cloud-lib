@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class QuadTree
 {
+    const MAX_OBJECTS = 10;
     const MAX_LEVELS = 10;
 
     protected $level;
@@ -68,17 +69,29 @@ class QuadTree
 
     public function insert(Box $box)
     {
-        $index = $this->getIndex($box);
-
-        if ($index !== -1 && $this->level < self::MAX_LEVELS) {
-            if (!$this->isSplited) {
-                $this->split();
+        if ($this->isSplited) {
+            $index = $this->getIndex($box);
+            if ($index !== -1) {
+                $this->nodes[$index]->insert($box);
+                return;
             }
-            $this->nodes[$index]->insert($box);
-            return;
         }
 
         $this->objects->add($box);
+
+        if (count($this->objects) > self::MAX_OBJECTS && $this->level < self::MAX_LEVELS) {
+            if (!$this->isSplited) {
+                $this->split();
+            }
+
+            foreach ($this->objects as $object) {
+                $index = $this->getIndex($object);
+                if ($index !== -1) {
+                    $this->objects->removeElement($object);
+                    $this->nodes[$index]->insert($object);
+                }
+            }
+        }
     }
 
     public function count()
@@ -97,18 +110,13 @@ class QuadTree
     public function retrieve(Box $box)
     {
         $return = array();
+        $index = $this->getIndex($box);
 
-        if ($this->isSplited) {
-
-            $index = $this->getIndex($box);
-            $nodes = (-1 === $index) ? $this->nodes : array($this->nodes[$index]);
-            foreach ($nodes as $node) {
-                $return = array_merge($return, $node->retrieve($box));
-            }
+        if ($index !== -1 && $this->isSplited) {
+            $return = array_merge($return, $this->nodes[$index]->retrieve($box));
         }
 
         $return = array_merge($return, $this->objects->toArray());
-
         return $return;
     }
 
@@ -156,5 +164,23 @@ class QuadTree
         }
 
         return $res . PHP_EOL;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllObjects()
+    {
+        $return = array();
+
+        $return = array_merge($return, $this->objects->toArray());
+
+        if ($this->isSplited) {
+            foreach ($this->nodes as $node) {
+                $return = array_merge($return, $node->getAllObjects());
+            }
+        }
+
+        return $return;
     }
 }
