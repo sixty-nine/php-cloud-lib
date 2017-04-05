@@ -71,21 +71,17 @@ class QuadTreeTest extends \PHPUnit_Framework_TestCase
     {
         $bounds = new Box(0, 0, 800, 600);
         $tree = new QuadTree($bounds);
-        $tree->insert($bounds);
 
-        $objects = $this->getObjectAttribute($tree, 'objects');
-        $this->assertEquals(1, $tree->count());
-        $this->assertCount(1, $objects);
-        $this->assertEquals($bounds, $objects[0]);
+        for ($i = 0; $i < 10; $i++) {
+            $tree->insert(new Box(10, $i * 10, 10, 10));
+            $this->assertEquals($i + 1, $tree->count());
+        }
 
-        $box = new Box(10, 10, 10, 10);
-        $tree->insert($box);
-        $this->assertEquals(2, $tree->count());
-        $objects = $this->getObjectAttribute($tree, 'objects');
-        $this->assertCount(1, $objects);
-        $this->assertAttributeNotEquals(null, 'nodes', $tree);
-        $node = $this->getObjectAttribute($tree, 'nodes')[0];
-        $this->assertEquals(1, $node->count());
+        $this->assertAttributeEquals(false, 'isSplited', $tree);
+
+        $tree->insert(new Box(10, 110, 10, 10));
+
+        $this->assertAttributeEquals(true, 'isSplited', $tree);
     }
 
     public function testRetrieve()
@@ -99,23 +95,18 @@ class QuadTreeTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        // Every box should be distributed on the 3rd level of the three
-        foreach ($this->getObjectAttribute($tree, 'nodes') as $node1) {
-            $this->assertEquals(16, $node1->count());
-            foreach ($this->getObjectAttribute($node1, 'nodes') as $node2) {
-                $this->assertEquals(4, $node2->count());
-                foreach ($this->getObjectAttribute($node2, 'nodes') as $node3) {
-                    $this->assertEquals(1, $node3->count());
-                }
-            }
-        }
-
         $nodes = $tree->retrieve(new Box(5, 5, 10, 10));
+        $expectedNodes = array(
+            new Box(0, 0, 10, 10),
+            new Box(10, 0, 10, 10),
+            new Box(0, 10, 10, 10),
+            new Box(10, 10, 10, 10),
+        );
         $this->assertCount(4, $nodes);
-        $this->assertEquals(new Box(0, 0, 10, 10), $nodes[0]);
-        $this->assertEquals(new Box(10, 0, 10, 10), $nodes[1]);
-        $this->assertEquals(new Box(0, 10, 10, 10), $nodes[2]);
-        $this->assertEquals(new Box(10, 10, 10, 10), $nodes[3]);
+
+        for ($i = 0; $i < 4; $i++) {
+            $this->assertTrue(in_array($nodes[$i], $expectedNodes));
+        }
     }
 
     public function testCollides()
@@ -131,6 +122,26 @@ class QuadTreeTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($tree->collides(new Box(0, 0, 10, 10)));
         $this->assertTrue($tree->collides(new Box(5, 5, 10, 10)));
+        $this->assertTrue($tree->collides(new Box(25, 25, 10, 10)));
+        $this->assertTrue($tree->collides(new Box(50, 50, 10, 10)));
+        $this->assertTrue($tree->collides(new Box(0, 0, 10, 10)));
+        $this->assertTrue($tree->collides(new Box(70, 0, 10, 10)));
+
+        $this->assertFalse($tree->collides(new Box(1000, 1000, 10, 10)));
+    }
+
+    public function testCollides1()
+    {
+        $bounds = new Box(0, 0, 100, 100);
+        $tree = new QuadTree($bounds);
+        $tree->insert(new Box(25, 25, 50, 50));
+
+        $this->assertTrue($tree->collides(new Box(0, 0, 50, 50)));
+        $this->assertTrue($tree->collides(new Box(25, 25, 10, 10)));
+        $this->assertTrue($tree->collides(new Box(50, 50, 10, 10)));
+
+        $this->assertFalse($tree->collides(new Box(0, 0, 10, 10)));
+        $this->assertFalse($tree->collides(new Box(80, 80, 10, 10)));
         $this->assertFalse($tree->collides(new Box(1000, 1000, 10, 10)));
     }
 

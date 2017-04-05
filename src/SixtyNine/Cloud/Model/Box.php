@@ -5,27 +5,59 @@ namespace SixtyNine\Cloud\Model;
 use Imagine\Image\BoxInterface;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * An axis-aligned rectangle with collision detection
  */
 class Box
 {
-    /** @var int */
+    /**
+     * @var float
+     * @JMS\Type("float")
+     */
     protected $x;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Type("float")
+     */
     protected $y;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Type("float")
+     */
     protected $width;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Type("float")
+     */
     protected $height;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Exclude()
+     */
     protected $top;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Exclude()
+     */
     protected $bottom;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Exclude()
+     */
     protected $left;
-    /** @var int */
+
+    /**
+     * @var float
+     * @JMS\Exclude()
+     */
     protected $right;
 
     public function __construct($x, $y, $width, $height)
@@ -43,7 +75,7 @@ class Box
         return new self($point->getX(), $point->getY(), $box->getWidth(), $box->getHeight());
     }
 
-    protected function update()
+    public function update()
     {
         $this->left = $this->x;
         $this->right = $this->x + $this->width;
@@ -80,8 +112,8 @@ class Box
     }
 
     /**
-     * @param int $deltaX
-     * @param int $deltaY
+     * @param float $deltaX
+     * @param float $deltaY
      * @return \SixtyNine\Cloud\Model\Box
      */
     public function move($deltaX, $deltaY)
@@ -100,7 +132,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getBottom()
     {
@@ -108,7 +140,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getHeight()
     {
@@ -116,7 +148,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getLeft()
     {
@@ -124,7 +156,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getRight()
     {
@@ -132,7 +164,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getTop()
     {
@@ -140,7 +172,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getWidth()
     {
@@ -148,7 +180,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getX()
     {
@@ -156,7 +188,7 @@ class Box
     }
 
     /**
-     * @return int
+     * @return float
      */
     public function getY()
     {

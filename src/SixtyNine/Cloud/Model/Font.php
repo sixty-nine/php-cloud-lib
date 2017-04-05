@@ -17,11 +17,9 @@ class Font
      * Create a TTF font from the given $file.
      * @param string $name
      * @param string $file
-     * @param int $paddingAngle
-     * @param int $paddingSize
      * @throws \InvalidArgumentException
      */
-    function __construct($name, $file, $paddingAngle = 0, $paddingSize = 1)
+    function __construct($name, $file)
     {
         if (!file_exists($file)) {
             throw new \InvalidArgumentException("File not found $file");
@@ -29,8 +27,6 @@ class Font
 
         $this->name = $name;
         $this->file = $file;
-        $this->paddingAngle = $paddingAngle;
-        $this->paddingSize = $paddingSize;
     }
 
     /**

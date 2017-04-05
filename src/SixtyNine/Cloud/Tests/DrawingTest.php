@@ -8,8 +8,12 @@ use Imagine\Image\Color;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
+use SixtyNine\Cloud\Drawer\Drawer;
 use SixtyNine\Cloud\Factory\FontsFactory;
+use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
+use SixtyNine\Cloud\Renderer\CloudRenderer;
+use SixtyNine\Cloud\Usher\Usher;
 
 class DrawingTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +57,100 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
         $height = $y >= 0 ? $box[0] : $box[0] + $y;
         $this->drawBox($image, $this->createPoint($pos[0] - $box[1], $y), $box[1], $height, 0xFF0000);
 
-        $image->save('/tmp/test.png');
+        $image->save('/tmp/test1.png');
+    }
+
+    /**
+     * Now the same using the Drawer class.
+     */
+    public function testDrawingWithDrawer()
+    {
+        $text = 'Foobar';
+        $size = 80;
+
+        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
+        $metrics = new FontMetrics($factory);
+        $fontSize = $metrics->calculateSize($text, 'Arial.ttf', $size, 0);
+        $pos = array(200, 200);
+        $box = array($fontSize->getWidth(), $fontSize->getHeight());
+
+        $image = Drawer::create($factory)
+            ->createImage(400, 400, '#000000')
+            ->setFont('Arial.ttf')
+            ->drawText($pos[0], $pos[1], $text, $size, '#FFFFFF', 0)
+            ->drawText($pos[0], $pos[1], $text, $size, '#FFFFFF', 90)
+            ->drawText($pos[0], $pos[1], $text, $size, '#FFFFFF', 180)
+            ->drawText($pos[0], $pos[1], $text, $size, '#FFFFFF', 270)
+            ->drawBoxForText($pos[0], $pos[1], $box[0], $box[1], 0, '#00ffff')
+            ->drawBoxForText($pos[0], $pos[1], $box[0], $box[1], 90, '#00ffff')
+            ->drawBoxForText($pos[0], $pos[1], $box[0], $box[1], 180, '#00ffff')
+            ->drawBoxForText($pos[0], $pos[1], $box[0], $box[1], 270, '#00ffff')
+            ->getImage()
+        ;
+
+        $image->save('/tmp/test2.png');
+    }
+
+    public function testDrawingAtOrigin()
+    {
+        $text = 'Foobar';
+        $size = 80;
+
+        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
+        $metrics = new FontMetrics($factory);
+        $fontSize = $metrics->calculateSize($text, 'Arial.ttf', $size, 0);
+        $pos = array(0, 0);
+        $box = array($fontSize->getWidth(), $fontSize->getHeight());
+
+        $image = Drawer::create($factory)
+            ->createImage(400, 400, '#000000')
+            ->setFont('Arial.ttf')
+            ->drawText($pos[0], $pos[1], $text, $size, '#FFFFFF', 0)
+            ->drawBoxForText($pos[0], $pos[1], $box[0], $box[1], 0, '#00ffff')
+            ->getImage()
+        ;
+
+        $image->save('/tmp/test3.png');
+    }
+
+    public function testDrawingWithUsher()
+    {
+        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
+        $metrics = new FontMetrics($factory);
+        $placer = PlacerFactory::getInstance()->getPlacer(PlacerFactory::PLACER_CIRCULAR, 400, 400, 5);
+        $usher = new Usher(400, 400, $placer, $metrics);
+        $drawer = Drawer::create($factory)
+            ->createImage(400, 400, '#000000')
+            ->setFont('Arial.ttf')
+        ;
+
+        (new CloudRenderer())->renderUsher($drawer->getImage(), $placer, '#202020');
+
+        $words = array(
+            array('first', 50, 0, '#ff0000'),
+            array('second', 20, 270, '#0000ff'),
+            array('third', 24, 0, '#00ff00'),
+            array('fourth', 36, 270, '#00ffff'),
+            array('fifth', 36, 0, '#ff00ff'),
+            array('sixth', 20, 0, '#ffff00'),
+            array('seventh', 24, 270, '#aaaaaa'),
+        );
+
+        foreach ($words as $values) {
+            $place = $usher->getPlace($values[0], 'Arial.ttf', $values[1], $values[2]);
+            if ($place) {
+                if ($values[2] === 0) {
+                    $drawer->drawText($place->getX(), $place->getY(), $values[0], $values[1], $values[3], $values[2]);
+                } else {
+                    $drawer->drawText($place->getX() + $place->getWidth(), $place->getY() + $place->getHeight() - $values[1], $values[0], $values[1], $values[3], $values[2]);
+                }
+                $drawer->drawBox($place->getX(), $place->getY(), $place->getWidth(), $place->getHeight(), $values[3]);
+            }
+        }
+
+        $drawer->drawMask($usher->getMask(), '#ffffff');
+
+        $drawer->getImage()->save('/tmp/test4.png');
     }
 
     protected function drawBox(ImageInterface $image, PointInterface $pos, $width, $height, $color = '#ffffff')

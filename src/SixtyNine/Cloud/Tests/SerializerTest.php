@@ -50,7 +50,6 @@ class SerializerTest extends \PHPUnit_Framework_TestCase
 
         $serializer = new Serializer();
         $json = $serializer->saveCloud($cloud, true);
-
         $obj = $serializer->loadCloud($json);
 
         $this->assertEquals($cloud, $obj);

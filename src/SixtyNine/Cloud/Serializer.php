@@ -38,6 +38,7 @@ class Serializer
         $cloud = $serializer->deserialize($data, Cloud::class, 'json');
         foreach ($cloud->getWords() as $word) {
             $word->setCloud($cloud);
+            $word->getBox()->update();
         }
         return $cloud;
     }
