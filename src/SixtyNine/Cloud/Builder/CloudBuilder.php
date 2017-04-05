@@ -14,6 +14,7 @@ use SixtyNine\Cloud\Model\CloudWord;
 use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
 use SixtyNine\Cloud\Usher\Usher;
+use Webmozart\Assert\Assert;
 
 class CloudBuilder
 {
@@ -92,10 +93,7 @@ class CloudBuilder
 
     public function setPlacer($name)
     {
-        if (!in_array($name, PlacerFactory::getInstance()->getPlacersNames())) {
-            throw new \InvalidArgumentException('Placer not found: ' . $name);
-        }
-
+        Assert::oneOf($name, PlacerFactory::getInstance()->getPlacersNames(), 'Placer not found: ' . $name);
         $this->placerName = $name;
         return $this;
     }
@@ -113,9 +111,7 @@ class CloudBuilder
 
     public function build()
     {
-        if (!$this->font) {
-            throw new \InvalidArgumentException('Font not set');
-        }
+        Assert::notNull($this->font, 'Font not set');
 
         $cloud = new Cloud();
         $cloud

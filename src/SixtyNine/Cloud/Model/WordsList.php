@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use SixtyNine\Cloud\Color\ColorGeneratorInterface;
 use SixtyNine\Cloud\Filters\Filters;
 use JMS\Serializer\Annotation as JMS;
+use Webmozart\Assert\Assert;
 
 class WordsList
 {
@@ -132,13 +133,8 @@ class WordsList
      */
     public function sortWords($sortBy, $sortOrder)
     {
-        if (!in_array($sortBy, $this->allowedSortBy)) {
-            throw new \InvalidArgumentException('Invalid sort by: ' . $sortBy);
-        }
-
-        if (!in_array($sortOrder, $this->allowedSortOrder)) {
-            throw new \InvalidArgumentException('Invalid sort order: ' - $sortOrder);
-        }
+        Assert::oneOf($sortBy, $this->allowedSortBy, 'Invalid sort by: ' . $sortBy);
+        Assert::oneOf($sortOrder, $this->allowedSortOrder, 'Invalid sort order: ' - $sortOrder);
 
         $sorter = function ($a, $b) use ($sortBy, $sortOrder) {
             $method = $sortBy === self::SORT_ANGLE

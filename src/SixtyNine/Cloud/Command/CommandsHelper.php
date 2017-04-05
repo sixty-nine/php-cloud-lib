@@ -19,6 +19,7 @@ use SixtyNine\Cloud\FontSize\LinearFontSizeGenerator;
 use SixtyNine\Cloud\Placer\PlacerInterface;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 use Symfony\Component\Console\Input\InputInterface;
+use Webmozart\Assert\Assert;
 
 class CommandsHelper
 {
@@ -36,16 +37,11 @@ class CommandsHelper
         $availablePlacers = PlacerFactory::getInstance()->getPlacersNames();
 
         if ($name) {
-            if (!in_array($name, $availablePlacers)) {
-                throw new \InvalidArgumentException('Word placer not found: ' . $name);
-            }
+            Assert::oneOf($name, $availablePlacers, 'Word placer not found: ' . $name);
             return $name;
         }
 
-        if (!count($availablePlacers)) {
-            throw new \InvalidArgumentException('No word placers available');
-        }
-
+        Assert::notEmpty($availablePlacers, 'No word placers available');
         return $availablePlacers[0];
     }
 
@@ -61,10 +57,7 @@ class CommandsHelper
             return $font;
         }
 
-        if (0 === count($factory->getFonts())) {
-            throw new \InvalidArgumentException('No font file found');
-        }
-
+        Assert::notEmpty($factory->getFonts(), 'No font file found');
         return $factory->getFonts()[0];
     }
 
@@ -75,9 +68,7 @@ class CommandsHelper
      */
     public function getFontSizeGenerator($type = 'linear')
     {
-        if (!in_array($type, $this->allowedFontSizeBoosts)) {
-            throw new \InvalidArgumentException('Invalid font size boost: ' . $type);
-        }
+        Assert::oneOf($type, $this->allowedFontSizeBoosts, 'Invalid font size boost: ' . $type);
 
         $generatorClass = LinearFontSizeGenerator::class;
         if ($type === 'dim') {
@@ -101,9 +92,7 @@ class CommandsHelper
     {
         if ($paletteName && $paletteType) {
 
-            if (!in_array($paletteType, $this->allowedPaletteTypes)) {
-                throw new \InvalidArgumentException('Palette type must be either "cycle" or "random"');
-            }
+            Assert::oneOf($paletteType, $this->allowedPaletteTypes, 'Palette type must be either "cycle" or "random"');
 
             $file = $palettesFile
                 ? $palettesFile
@@ -130,9 +119,7 @@ class CommandsHelper
      */
     public function output(ImageInterface $image, $outputFormat, $outputFile = null)
     {
-        if (!in_array($outputFormat, $this->allowedOutputFormats)) {
-            throw new \InvalidArgumentException('Invalid output format: ' . $outputFormat);
-        }
+        Assert::oneOf($outputFormat, $this->allowedOutputFormats, 'Invalid output format: ' . $outputFormat);
 
         if ($outputFile) {
             $image->save($outputFile, array('format' => $outputFormat));
@@ -191,9 +178,7 @@ class CommandsHelper
      */
     public function createCloud($type, InputInterface $input)
     {
-        if (!in_array($type, array('from-url', 'from-file'))) {
-            throw new \InvalidArgumentException('Invalid type for createCloud: ' . $type);
-        }
+        Assert::oneOf($type, array('from-url', 'from-file'), 'Invalid type for createCloud: ' . $type);
 
         // Build the filters
         $filtersBuilder = $this->getFilterBuilder(
@@ -230,9 +215,7 @@ class CommandsHelper
 
         if ($type === 'from-file') {
             $file = $input->getArgument('file');
-            if (!file_exists($file)) {
-                throw new \InvalidArgumentException('File not found: ' . $file);
-            }
+            Assert::fileExists($file, 'File not found: ' . $file);
             $listBuilder->importWords(file_get_contents($file));
         } else {
             $listBuilder->importUrl($input->getArgument('url'));

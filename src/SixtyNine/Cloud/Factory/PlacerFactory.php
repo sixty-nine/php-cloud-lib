@@ -10,6 +10,7 @@ use SixtyNine\Cloud\Placer\LissajouPlacer;
 use SixtyNine\Cloud\Placer\PlacerInterface;
 use SixtyNine\Cloud\Placer\SpiranglePlacer;
 use SixtyNine\Cloud\Placer\WordlePlacer;
+use Webmozart\Assert\Assert;
 
 class PlacerFactory
 {
@@ -66,10 +67,7 @@ class PlacerFactory
      */
     protected function getPlacerClass($name)
     {
-        if (!array_key_exists($name, $this->placers)) {
-            throw new \InvalidArgumentException('Placer not found: ' . $name);
-        }
-
+        Assert::keyExists($this->placers, $name, 'Placer not found: ' . $name);
         return $this->placers[$name];
     }
 } 

@@ -10,6 +10,7 @@ use Imagine\Image\Point;
 use SixtyNine\Cloud\Model\Box as MyBox;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Usher\MaskInterface;
+use Webmozart\Assert\Assert;
 
 class Drawer
 {
@@ -79,10 +80,7 @@ class Drawer
      */
     public function drawText($x, $y, $text, $size, $color = '#000000', $angle = 0)
     {
-        if (!$this->font) {
-            throw new \InvalidArgumentException('Font not set');
-        }
-
+        Assert::notNull($this->font, 'Font not set');
         $font = $this->fontsFactory->getImagineFont($this->font, $size, $color);
         $this->image->draw()->text($text, $font, new Point($x , $y), $angle);
 
@@ -171,10 +169,7 @@ class Drawer
      */
     public function getImage()
     {
-        if (!$this->image) {
-            throw new \InvalidArgumentException('Image not created');
-        }
-
+        Assert::notNull($this->image, 'Image not created');
         return $this->image;
     }
 }
