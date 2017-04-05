@@ -1,6 +1,7 @@
 <?php
 
 namespace SixtyNine\Cloud\Model;
+use Webmozart\Assert\Assert;
 
 /**
  * Embed a TTF font in the Cloud system.
@@ -21,10 +22,7 @@ class Font
      */
     function __construct($name, $file)
     {
-        if (!file_exists($file)) {
-            throw new \InvalidArgumentException("File not found $file");
-        }
-
+        Assert::fileExists($file, "File not found $file");
         $this->name = $name;
         $this->file = $file;
     }

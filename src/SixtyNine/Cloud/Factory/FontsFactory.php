@@ -9,6 +9,7 @@ use Imagine\Image\Color;
 use Imagine\Image\Point;
 use Imagine\Gd\Font as ImagineFont;
 use SixtyNine\Cloud\Model\Font;
+use Webmozart\Assert\Assert;
 
 class FontsFactory
 {
@@ -25,10 +26,7 @@ class FontsFactory
 
     public  static function create($fontsPath)
     {
-        if (!file_exists($fontsPath)) {
-            throw new \InvalidArgumentException('The fonts path must exist');
-        }
-
+        Assert::fileExists($fontsPath, 'The fonts path must exist');
         return new self($fontsPath);
     }
 
@@ -47,10 +45,7 @@ class FontsFactory
      */
     public function getFont($name)
     {
-        if (!array_key_exists($name, $this->fonts)) {
-            throw new \InvalidArgumentException('Font not found: ' . $name);
-        }
-
+        Assert::keyExists($this->fonts, $name, 'Font not found: ' . $name);
         return $this->fonts[$name];
     }
 

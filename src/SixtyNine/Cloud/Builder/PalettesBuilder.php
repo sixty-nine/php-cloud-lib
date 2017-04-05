@@ -4,6 +4,7 @@ namespace SixtyNine\Cloud\Builder;
 
 use SixtyNine\Cloud\Model\Palette;
 use Symfony\Component\Yaml\Yaml;
+use Webmozart\Assert\Assert;
 
 class PalettesBuilder
 {
@@ -39,15 +40,11 @@ class PalettesBuilder
      */
     public function importPalettes($file)
     {
-        if (!file_exists($file)) {
-            throw new \InvalidArgumentException('File not found: ' . $file);
-        }
+        Assert::fileExists($file, 'File not found: ' . $file);
 
         $yml = Yaml::parse(file_get_contents($file));
 
-        if (!array_key_exists('palettes', $yml)) {
-            throw new \InvalidArgumentException('Invalid palettes YAML');
-        }
+        Assert::keyExists($yml, 'palettes', 'Invalid palettes YAML');
 
         foreach ($yml['palettes'] as $name => $colors) {
             $this->addPalette($name, $colors);
@@ -63,10 +60,7 @@ class PalettesBuilder
      */
     public function getNamedPalette($name)
     {
-        if (!array_key_exists($name, $this->palettes)) {
-            throw new \InvalidArgumentException('Palette not found: ' . $name);
-        }
-
+        Assert::keyExists($this->palettes, $name, 'Palette not found: ' . $name);
         return $this->palettes[$name];
     }
 
