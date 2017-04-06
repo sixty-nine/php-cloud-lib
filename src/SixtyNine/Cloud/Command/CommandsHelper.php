@@ -19,6 +19,7 @@ use SixtyNine\Cloud\FontSize\LinearFontSizeGenerator;
 use SixtyNine\Cloud\Placer\PlacerInterface;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Stopwatch\Stopwatch;
 use Webmozart\Assert\Assert;
 
 class CommandsHelper
@@ -188,7 +189,7 @@ class CommandsHelper
      */
     public function insertWords(WordsListBuilder $builder, $type, $file = null, $url = null)
     {
-        Assert::true(null !== $file | null !== $url);
+        Assert::true(null !== $file || null !== $url);
         Assert::oneOf($type, array('from-url', 'from-file'), 'Invalid type for createCloud: ' . $type);
 
         if ($type === 'from-file') {
@@ -254,7 +255,7 @@ class CommandsHelper
             ->randomizeOrientation($input->getOption('vertical-probability'))
         ;
 
-        $this->insertWords($listBuilder, $type, $input->getArgument('file'), $input->getArgument('url'));
+        $this->insertWords($listBuilder, $type, $input->getOption('save-to-file'), $input->getArgument('url'));
 
         $this->sortWords($listBuilder, $input->getOption('sort-by'), $input->getOption('sort-order'));
 
@@ -283,7 +284,7 @@ class CommandsHelper
             ->useList($list)
         ;
 
-        if ($input->getOption('preLoggercise')) {
+        if ($input->getOption('precise')) {
             $cloudBuilder->setPrecise();
         }
 
