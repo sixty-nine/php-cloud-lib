@@ -222,6 +222,9 @@ class CommandsHelper
     {
         Assert::oneOf($type, array('from-url', 'from-file'), 'Invalid type for createCloud: ' . $type);
 
+        $stopwatch = new Stopwatch();
+        $stopwatch->start('createCloud');
+
         // Build the filters
         $filtersBuilder = $this->getFilterBuilder(
             $input->getOption('min-word-length'),
@@ -297,5 +300,8 @@ class CommandsHelper
         );
 
         $this->output($image, $input->getOption('format'), $input->getOption('save-to-file'));
+
+        $event = $stopwatch->stop('createCloud');
+        return $event;
     }
 }
