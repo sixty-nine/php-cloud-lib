@@ -51,9 +51,10 @@ EOF
             ->build()
         ;
 
-        $renderer = new CloudRenderer();
-        $image = $renderer->render($cloud, $factory, true);
-        $renderer->renderUsher($image, $placer, '#FFAA50');
+        $renderer = new CloudRenderer($cloud, $factory);
+        $renderer->renderCloud();
+        $image = $renderer->getImage();
+        $renderer->renderUsher($placer, '#FFAA50');
 
         $this->assertInstanceOf(Image::class, $image);
 

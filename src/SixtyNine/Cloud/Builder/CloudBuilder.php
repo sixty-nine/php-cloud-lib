@@ -13,6 +13,7 @@ use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Model\CloudWord;
 use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
+use SixtyNine\Cloud\Usher\MaskInterface;
 use SixtyNine\Cloud\Usher\Usher;
 use Webmozart\Assert\Assert;
 
@@ -40,6 +41,8 @@ class CloudBuilder
     protected $fontsFactory;
     /** @var bool */
     protected $precise = false;
+    /** @var MaskInterface */
+    protected $mask;
 
     /**
      * @param FontsFactory $fontsFactory
@@ -159,7 +162,7 @@ class CloudBuilder
 
         if ($this->list) {
             $this->addWords($cloud, $this->list);
-            $this->placeWords($cloud);
+            $this->mask = $this->placeWords($cloud);
         }
 
         return $cloud;
@@ -199,6 +202,7 @@ class CloudBuilder
 
     /**
      * @param Cloud $cloud
+     * @return \SixtyNine\Cloud\Usher\Usher
      */
     protected function placeWords(Cloud $cloud)
     {
@@ -222,6 +226,15 @@ class CloudBuilder
                 $word->setPosition(array((int)$place->getX(), (int)$place->getY()));
             }
         }
+
+        return $usher->getMask();
     }
 
+    /**
+     * @return MaskInterface
+     */
+    public function getMask()
+    {
+        return $this->mask;
+    }
 }

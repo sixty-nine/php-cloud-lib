@@ -12,24 +12,32 @@ use SixtyNine\Cloud\Drawer\Drawer;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Placer\PlacerInterface;
+use SixtyNine\Cloud\Usher\MaskInterface;
 
 class CloudRenderer
 {
+    /** @var Drawer */
+    protected $drawer;
+    /** @var Cloud */
+    protected $cloud;
+
     /**
      * @param Cloud $cloud
-     * @param \SixtyNine\Cloud\Factory\FontsFactory $fontsFactory
-     * @param bool $drawBoundingBoxes
-     * @return \Imagine\Gd\Image|\Imagine\Image\ImageInterface
+     * @param FontsFactory $fontsFactory
      */
-    public function render(Cloud $cloud, FontsFactory $fontsFactory, $drawBoundingBoxes = false)
+    public function __construct(Cloud $cloud, FontsFactory $fontsFactory)
     {
-        $drawer = Drawer::create($fontsFactory)
+        $this->cloud = $cloud;
+        $this->drawer = Drawer::create($fontsFactory)
             ->createImage($cloud->getWidth(), $cloud->getHeight(), $cloud->getBackgroundColor())
             ->setFont($cloud->getFont())
         ;
+    }
 
+    public function renderCloud()
+    {
         /** @var \SixtyNine\Cloud\Model\CloudWord $word */
-        foreach ($cloud->getWords() as $word) {
+        foreach ($this->cloud->getWords() as $word) {
 
             if (!$word->getIsVisible()) {
                 continue;
@@ -39,29 +47,39 @@ class CloudRenderer
             $box = $word->getBox();
 
             if ($word->getAngle() === 270) {
-                $drawer->drawText($pos[0] + $box->getWidth(), $pos[1] + $box->getHeight() - $word->getSize(), $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
+                $this->drawer->drawText($pos[0] + $box->getWidth(), $pos[1] + $box->getHeight() - $word->getSize(), $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
             } else {
-                $drawer->drawText($pos[0], $pos[1], $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
-            }
-
-            if ($drawBoundingBoxes) {
-                $drawer->drawBox($box->getX(), $box->getY(), $box->getWidth(), $box->getHeight(), '#ff0000');
+                $this->drawer->drawText($pos[0], $pos[1], $word->getText(), $word->getSize(), $word->getColor(), $word->getAngle());
             }
         }
-
-        return $drawer->getImage();
     }
 
     /**
-     * @param ImageInterface $image
+     * @param string $color
+     */
+    public function renderBoundingBoxes($color = '#ff0000')
+    {
+        /** @var \SixtyNine\Cloud\Model\CloudWord $word */
+        foreach ($this->cloud->getWords() as $word) {
+
+            if (!$word->getIsVisible()) {
+                continue;
+            }
+
+            $box = $word->getBox();
+
+            $this->drawer->drawBox($box->getX(), $box->getY(), $box->getWidth(), $box->getHeight(), $color);
+        }
+    }
+
+    /**
      * @param PlacerInterface $placer
      * @param string $color
      * @param int $maxIterations
      */
     public function renderUsher(
-        ImageInterface $image,
         PlacerInterface $placer,
-        $color,
+        $color = '#ff0000',
         $maxIterations = 5000
     ) {
         $i = 0;
@@ -73,7 +91,7 @@ class CloudRenderer
             $next = $placer->getNextPlaceToTry($cur);
 
             if ($next) {
-                $image->draw()->line($cur, $next, $color);
+                $this->getImage()->draw()->line($cur, $next, $color);
             }
 
             $i++;
@@ -83,5 +101,22 @@ class CloudRenderer
                 break;
             }
         }
+    }
+
+    /**
+     * @param MaskInterface $mask
+     * @param string $color
+     */
+    public function renderMask(MaskInterface $mask, $color = '#ff0000')
+    {
+        $this->drawer->drawMask($mask, $color);
+    }
+
+    /**
+     * @return ImageInterface
+     */
+    public function getImage()
+    {
+        return $this->drawer->getImage();
     }
 }

@@ -43,6 +43,7 @@ abstract class BaseCloudCommand extends Command
             ->addOption('fonts-path', null, InputOption::VALUE_OPTIONAL, 'Optional path to the fonts, if omitted, defaults to <base>/fonts')
             ->addOption('render-usher', null, InputOption::VALUE_NONE, 'Enable the rendering of the words usher')
             ->addOption('render-boxes', null, InputOption::VALUE_NONE, 'Enable the rendering of the words bounding boxes')
+            ->addOption('render-mask', null, InputOption::VALUE_NONE, 'Enable the rendering of the usher mask')
             ->addOption('precise', null, InputOption::VALUE_NONE, 'Enable precise collision detection')
         ;
     }

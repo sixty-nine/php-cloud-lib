@@ -6,7 +6,9 @@ use Imagine\Gd\Image;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\Color;
+use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
+use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -35,8 +37,13 @@ class DebugUsherCommand extends Command
     /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $cloud = (new Cloud())
+            ->setWidth($input->getOption('width'))
+            ->setHeight($input->getOption('height'))
+            ->setBackgroundColor($input->getOption('background-color'))
+        ;
         $helper = new CommandsHelper();
-        $renderer = new CloudRenderer();
+        $renderer = new CloudRenderer($cloud, FontsFactory::create(BASE_PATH . '/fonts'));
         $placerName = $helper->getPlacer($input->getArgument('placer'));
 
         $imagine = new Imagine();
@@ -56,8 +63,8 @@ class DebugUsherCommand extends Command
             $input->getOption('height')
         );
 
-        $renderer->renderUsher($image, $placer, $input->getOption('color'));
+        $renderer->renderUsher($placer, $input->getOption('color'));
 
-        $helper->output($image, $input->getOption('format'), $input->getOption('save-to-file'));
+        $helper->output($renderer->getImage(), $input->getOption('format'), $input->getOption('save-to-file'));
     }
 }

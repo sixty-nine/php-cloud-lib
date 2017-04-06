@@ -137,16 +137,30 @@ class CommandsHelper
      * @param bool $renderBoxes
      * @return \Imagine\Gd\Image|ImageInterface
      */
-    protected function render(CloudBuilder $cloudBuilder, FontsFactory $factory, PlacerInterface $placer = null, $renderBoxes = false)
-    {
-        $renderer = new CloudRenderer();
-        $image = $renderer->render($cloudBuilder->build(), $factory, $renderBoxes);
+    protected function render(
+        CloudBuilder $cloudBuilder,
+        FontsFactory $factory,
+        PlacerInterface $placer = null,
+        $renderBoxes = false,
+        $renderMask = false
+    ) {
+        $renderer = new CloudRenderer($cloudBuilder->build(), $factory);
 
-        if ($placer) {
-            $renderer->renderUsher($image, $placer, '#FF0000');
+        if ($renderBoxes) {
+            $renderer->renderBoundingBoxes('#888888');
         }
 
-        return $image;
+        if ($placer) {
+            $renderer->renderUsher($placer, '#333333');
+        }
+
+        if ($renderMask) {
+            $renderer->renderMask($cloudBuilder->getMask(), '#ababab');
+        }
+
+        $renderer->renderCloud();
+
+        return $renderer->getImage();
     }
 
     /**
@@ -296,7 +310,8 @@ class CommandsHelper
             $cloudBuilder,
             $factory,
             $input->getOption('render-usher') ? $placer : null,
-            $input->getOption('render-boxes')
+            $input->getOption('render-boxes'),
+            $input->getOption('render-mask')
         );
 
         $this->output($image, $input->getOption('format'), $input->getOption('save-to-file'));

@@ -12,6 +12,7 @@ use SixtyNine\Cloud\Drawer\Drawer;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
+use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 use SixtyNine\Cloud\Usher\Usher;
 
@@ -124,8 +125,6 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
             ->setFont('Arial.ttf')
         ;
 
-        (new CloudRenderer())->renderUsher($drawer->getImage(), $placer, '#202020');
-
         $words = array(
             array('first', 50, 0, '#ff0000'),
             array('second', 20, 270, '#0000ff'),
@@ -163,8 +162,6 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
             ->createImage(400, 400, '#000000')
             ->setFont('Arial.ttf')
         ;
-
-        (new CloudRenderer())->renderUsher($drawer->getImage(), $placer, '#202020');
 
         $words = array(
             array('first', 50, 0, '#ff0000'),
