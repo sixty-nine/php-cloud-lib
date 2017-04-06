@@ -25,6 +25,7 @@ class BuildFromFileCommand extends BaseCloudCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new CommandsHelper();
-        $helper->createCloud('from-file', $input);
+        $timing = $helper->createCloud('from-file', $input);
+        $output->writeln(sprintf('Cloud generated in %s seconds', $timing->getDuration() / 1000));
     }
 }
