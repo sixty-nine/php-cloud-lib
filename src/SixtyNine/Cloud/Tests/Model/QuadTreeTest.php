@@ -50,6 +50,9 @@ class QuadTreeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedIndex, $tree->getIndex($box));
     }
 
+    /**
+     * @return array
+     */
     public function getIndexProvider()
     {
         return array(

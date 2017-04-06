@@ -25,6 +25,9 @@ class WordsListBuilder
     /** @var ColorGeneratorInterface */
     protected $colorGenerator;
 
+    /**
+     * Disallow direct instantiation
+     */
     protected function __construct()
     {
         $this->filters = FiltersBuilder::create()->build();
@@ -90,12 +93,20 @@ class WordsListBuilder
         return $this;
     }
 
+    /**
+     * @param int $rate
+     * @return $this
+     */
     public function randomizeOrientation($rate = 50)
     {
         $this->randomizeOrientation = $rate;
         return $this;
     }
 
+    /**
+     * @param ColorGeneratorInterface $generator
+     * @return $this
+     */
     public function randomizeColors(ColorGeneratorInterface $generator)
     {
         $this->colorGenerator = $generator;

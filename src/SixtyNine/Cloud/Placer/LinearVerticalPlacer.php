@@ -10,12 +10,21 @@ class LinearVerticalPlacer extends AbstractPlacer
     /** @var int */
     protected $increment;
 
+    /**
+     * @param int $imgWidth
+     * @param int $imgHeight
+     * @param int $increment
+     */
     public function __construct($imgWidth, $imgHeight, $increment = 10)
     {
         parent::__construct($imgWidth, $imgHeight);
         $this->increment = $increment;
     }
 
+    /**
+     * @param PointInterface $current
+     * @return bool|PointInterface
+     */
     public function getNextPlaceToTry(PointInterface $current)
     {
         if ($current->getY() < $this->imgHeight) {
@@ -29,6 +38,9 @@ class LinearVerticalPlacer extends AbstractPlacer
         return false;
     }
 
+    /**
+     * @return PointInterface
+     */
     function getFirstPlaceToTry()
     {
         return new Point(0, 0);

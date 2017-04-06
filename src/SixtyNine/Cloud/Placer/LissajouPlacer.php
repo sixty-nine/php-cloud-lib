@@ -9,6 +9,7 @@ class LissajouPlacer extends AbstractPlacer
 {
     protected $increment = 0;
 
+    /** {@inheritdoc} */
     public function getNextPlaceToTry(PointInterface $current)
     {
         $first = $this->getFirstPlaceToTry();

@@ -102,7 +102,7 @@ class WordsList
      */
     public function removeWord(Word $word)
     {
-        $this->words->remove($word);
+        $this->words->removeElement($word);
         return $this;
     }
 

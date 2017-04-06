@@ -34,8 +34,14 @@ class PlacerFactory
         self::PLACER_LISSAJOU => LissajouPlacer::class,
     );
 
+    /**
+     * Disallow direct instantiation
+     */
     protected function __construct() { }
 
+    /**
+     * @return PlacerFactory
+     */
     public  static function getInstance()
     {
         if (!self::$instance) {
@@ -44,16 +50,31 @@ class PlacerFactory
         return self::$instance;
     }
 
+    /**
+     * @return array
+     */
     public function getPlacersNames()
     {
         return array_keys($this->placers);
     }
 
+    /**
+     * @param int $imgWidth
+     * @param int $imgHeight
+     * @return PlacerInterface
+     */
     public function getDefaultPlacer($imgWidth, $imgHeight)
     {
         return $this->getPlacer(self::PLACER_CIRCULAR, $imgWidth, $imgHeight);
     }
 
+    /**
+     * @param string $name
+     * @param int $imgWidth
+     * @param int $imgHeight
+     * @param int $increment
+     * @return PlacerInterface
+     */
     public function getPlacer($name, $imgWidth, $imgHeight, $increment = 10)
     {
         $className = $this->getPlacerClass($name);

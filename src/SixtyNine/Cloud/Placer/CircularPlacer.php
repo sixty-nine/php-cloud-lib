@@ -9,6 +9,7 @@ class CircularPlacer extends AbstractPlacer
 {
     protected $increment = 0;
 
+    /** {@inheritdoc} */
     public function getNextPlaceToTry(PointInterface $current)
     {
         $a = 0;

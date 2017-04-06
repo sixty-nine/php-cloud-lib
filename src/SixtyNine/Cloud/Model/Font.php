@@ -20,7 +20,7 @@ class Font
      * @param string $file
      * @throws \InvalidArgumentException
      */
-    function __construct($name, $file)
+    public function __construct($name, $file)
     {
         Assert::fileExists($file, "File not found $file");
         $this->name = $name;

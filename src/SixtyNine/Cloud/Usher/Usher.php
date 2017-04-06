@@ -58,8 +58,9 @@ class Usher
     /**
      * @param string $word
      * @param string $font
-     * @param int $size
+     * @param int $fontSize
      * @param int $angle
+     * @param bool $precise
      * @return bool|Box
      */
     public function getPlace($word, $font, $fontSize, $angle, $precise = false)
@@ -87,7 +88,7 @@ class Usher
             if ($precise) {
                 $this->addWordToMask($word, $place, $font, $fontSize, $angle);
             } else {
-                $this->mask->add(new Point(0, 0), $place, $angle);
+                $this->mask->add(new Point(0, 0), $place);
             }
             return $place;
         }
@@ -95,6 +96,13 @@ class Usher
         return false;
     }
 
+    /**
+     * @param string $word
+     * @param Box $place
+     * @param string $font
+     * @param int $size
+     * @param int $angle
+     */
     public function addWordToMask($word, Box $place, $font, $size, $angle)
     {
         $base = $this->metrics->calculateSize($word, $font, $size, $angle);
@@ -121,7 +129,7 @@ class Usher
                     $place->getX() + ($base->getWidth() - $box->getWidth()),
                     $place->getY() + ($base->getHeight() - $box->getHeight())
                 );
-                $this->mask->add($newPos, $box, $angle);
+                $this->mask->add($newPos, $box);
                 $place = $place->move(0, -$box->getHeight());
             }
         }
@@ -141,6 +149,7 @@ class Usher
         $placeFound = false;
         $current = $this->placer->getFirstPlaceToTry();
         $curTry = 1;
+        $currentBox = null;
 
         while (!$placeFound) {
 
@@ -178,6 +187,9 @@ class Usher
         return $currentBox->inside($bounds) ? $currentBox : false;
     }
 
+    /**
+     * @return MaskInterface
+     */
     public function getMask()
     {
         return $this->mask;

@@ -22,7 +22,7 @@ abstract class AbstractPlacer implements PlacerInterface
     }
 
     /** {@inheritdoc} */
-    function getFirstPlaceToTry()
+    public function getFirstPlaceToTry()
     {
         return new Point((int)($this->imgWidth / 2), (int)($this->imgHeight / 2));
     }

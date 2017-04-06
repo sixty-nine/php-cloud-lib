@@ -26,6 +26,9 @@ class FiltersBuilder
     /** @var int|null */
     protected $maxLength;
 
+    /**
+     * Disallow direct instantiation
+     */
     protected function __construct()
     {
         $this->allowedCase = array(
@@ -35,6 +38,9 @@ class FiltersBuilder
         );
     }
 
+    /**
+     * @return FiltersBuilder
+     */
     public static function create()
     {
         return new self();

@@ -27,6 +27,9 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
         $this->assertFilteredWord($filter, $word, $expectedKeepWord, $expectedWord);
     }
 
+    /**
+     * @return array
+     */
     public function wordsProvider()
     {
         return array(
@@ -61,6 +64,12 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param FilterInterface $filter
+     * @param string $word
+     * @param bool $expectedKeepWord
+     * @param null $expectedFiltered
+     */
     protected function assertFilteredWord(FilterInterface $filter, $word, $expectedKeepWord, $expectedFiltered = null)
     {
         $filters = new Filters(array($filter));
@@ -86,6 +95,10 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @param string $text
+     * @return Word
+     */
     protected function getWord($text)
     {
         return (new Word())->setText($text);

@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BuildFromUrlCommand extends BaseCloudCommand
 {
+    /** {@inheritdoc} */
     protected function configure()
     {
         parent::configure();
@@ -19,6 +20,7 @@ class BuildFromUrlCommand extends BaseCloudCommand
         ;
     }
 
+    /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new CommandsHelper();

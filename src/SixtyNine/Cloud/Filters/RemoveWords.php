@@ -21,15 +21,6 @@ class RemoveWords extends AbstractFilter implements FilterInterface
     }
 
     /** {@inheritdoc} */
-    public function filterWord($word)
-    {
-        if (in_array($word, $this->unwantedWords))  {
-            return false;
-        }
-        return $word;
-    }
-
-    /** {@inheritdoc} */
     public function keepWord($word)
     {
         return !in_array($word, $this->unwantedWords);

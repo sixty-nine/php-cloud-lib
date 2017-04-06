@@ -4,8 +4,6 @@ namespace SixtyNine\Cloud\Tests\Model;
 
 use Imagine\Gd\Image;
 use Imagine\Image\Point;
-use SixtyNine\Cloud\Factory\FontsFactory;
-use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\Model\Box;
 use SixtyNine\Cloud\Usher;
 
@@ -58,6 +56,9 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function boxesProvider()
     {
         return array(

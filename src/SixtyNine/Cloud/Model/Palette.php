@@ -10,7 +10,7 @@ class Palette
     protected $name;
 
     /**
-     * @var string
+     * @var array
      */
     protected $colors;
 
@@ -33,7 +33,7 @@ class Palette
     }
 
     /**
-     * @param string $colors
+     * @param array $colors
      * @return $this
      */
     public function setColors($colors)
@@ -43,7 +43,7 @@ class Palette
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getColors()
     {

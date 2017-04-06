@@ -9,6 +9,7 @@ class WordlePlacer extends AbstractPlacer
 {
     protected $increment = 0;
 
+    /** {@inheritdoc} */
     public function getNextPlaceToTry(PointInterface $current)
     {
         $i = $this->increment;

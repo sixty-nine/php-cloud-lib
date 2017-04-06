@@ -16,6 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class DebugUsherCommand extends Command
 {
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this
@@ -31,6 +32,7 @@ class DebugUsherCommand extends Command
         ;
     }
 
+    /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new CommandsHelper();

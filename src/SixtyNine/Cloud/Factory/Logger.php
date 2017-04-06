@@ -20,18 +20,24 @@ class Logger
 
     /** @var Logger */
     protected static $instance;
-    /** @var Logger */
+    /** @var MonologLogger */
     protected $logger;
     /** @var string */
     protected $filename;
     /** @var bool */
     protected $outputChosen = false;
 
+    /**
+     * Disallow direct instantiation
+     */
     protected function __construct()
     {
         $this->logger = new MonologLogger('log');
     }
 
+    /**
+     * @return Logger
+     */
     public  static function getInstance()
     {
         if (!self::$instance) {
@@ -40,6 +46,9 @@ class Logger
         return self::$instance;
     }
 
+    /**
+     * @return Logger
+     */
     public function toConsole()
     {
         $this->outputChosen = true;
@@ -47,6 +56,12 @@ class Logger
         return $this;
     }
 
+    /**
+     * @param string $filename
+     * @param int $level
+     * @return Logger
+     * @throws \InvalidArgumentException
+     */
     public function toFile($filename, $level = MonologLogger::DEBUG)
     {
         if ($this->filename) {
@@ -58,6 +73,11 @@ class Logger
         return $this;
     }
 
+    /**
+     * @param string $message
+     * @param int $level
+     * @param array $context
+     */
     public function log($message, $level = MonologLogger::INFO, array $context = array())
     {
         if (!$this->outputChosen) {
@@ -67,6 +87,9 @@ class Logger
         $this->logger->log($level, $message, $context);
     }
 
+    /**
+     * @return MonologLogger
+     */
     public function getLogger()
     {
         return $this->logger;

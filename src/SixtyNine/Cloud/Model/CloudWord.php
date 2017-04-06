@@ -37,7 +37,7 @@ class CloudWord
     protected $position;
 
     /**
-     * @var array
+     * @var Box
      * @JMS\Type("SixtyNine\Cloud\Model\Box")
      */
     protected $box;
@@ -187,7 +187,7 @@ class CloudWord
     }
 
     /**
-     * @param array $box
+     * @param Box $box
      * @return $this
      */
     public function setBox($box)

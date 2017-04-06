@@ -9,10 +9,13 @@ abstract class ColorGenerator implements ColorGeneratorInterface
     /** @var \SixtyNine\Cloud\Model\Palette */
     protected $palette;
 
+    /**
+     * @param Palette $palette
+     */
     public function __construct(Palette $palette)
     {
         $this->palette = $palette;
     }
 
-    public abstract function getNextColor();
+    abstract public function getNextColor();
 }

@@ -18,12 +18,19 @@ class FontsFactory
     /** @var array */
     protected $fonts = array();
 
+    /**
+     * @param string $fontsPath
+     */
     protected function __construct($fontsPath)
     {
         $this->fontsPath = $fontsPath;
         $this->loadFonts();
     }
 
+    /**
+     * @param string $fontsPath
+     * @return FontsFactory
+     */
     public  static function create($fontsPath)
     {
         Assert::fileExists($fontsPath, 'The fonts path must exist');
@@ -61,6 +68,9 @@ class FontsFactory
         return new ImagineFont($font->getFile(), $size, new Color($color));
     }
 
+    /**
+     * @return array
+     */
     public function getFonts()
     {
         return array_keys($this->fonts);

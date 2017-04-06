@@ -18,6 +18,10 @@ class SpiranglePlacer extends AbstractPlacer
         return ($n > 0) - ($n < 0);
     }
 
+    /**
+     * @param PointInterface $current
+     * @return bool|PointInterface
+     */
     public function getNextPlaceToTry(PointInterface $current)
     {
         $r = 0.1;

@@ -36,6 +36,7 @@ class Drawer
     }
 
     /**
+     * @param \SixtyNine\Cloud\Factory\FontsFactory $fontsFactory
      * @return Drawer
      */
     public static function create(FontsFactory $fontsFactory)
@@ -156,6 +157,11 @@ class Drawer
         return new MyBox($x, $y, $width, $height);
     }
 
+    /**
+     * @param MaskInterface $mask
+     * @param string $color
+     * @return $this
+     */
     public function drawMask(MaskInterface $mask, $color = '#ffffff')
     {
         foreach ($mask->getBoxes() as $box) {

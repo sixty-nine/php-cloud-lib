@@ -23,9 +23,9 @@ use Webmozart\Assert\Assert;
 
 class CommandsHelper
 {
-    protected $allowedFontSizeBoosts = array('linear', 'dim', 'boost');
-    protected $allowedPaletteTypes = array('cycle', 'random');
-    protected $allowedOutputFormats = array('gif', 'jpeg', 'png');
+    protected $fontSizeBoosts = array('linear', 'dim', 'boost');
+    protected $paletteTypes = array('cycle', 'random');
+    protected $outputFormats = array('gif', 'jpeg', 'png');
 
     /**
      * @param string $name
@@ -68,7 +68,7 @@ class CommandsHelper
      */
     public function getFontSizeGenerator($type = 'linear')
     {
-        Assert::oneOf($type, $this->allowedFontSizeBoosts, 'Invalid font size boost: ' . $type);
+        Assert::oneOf($type, $this->fontSizeBoosts, 'Invalid font size boost: ' . $type);
 
         $generatorClass = LinearFontSizeGenerator::class;
         if ($type === 'dim') {
@@ -92,7 +92,7 @@ class CommandsHelper
     {
         if ($paletteName && $paletteType) {
 
-            Assert::oneOf($paletteType, $this->allowedPaletteTypes, 'Palette type must be either "cycle" or "random"');
+            Assert::oneOf($paletteType, $this->paletteTypes, 'Palette type must be either "cycle" or "random"');
 
             $file = $palettesFile
                 ? $palettesFile
@@ -119,7 +119,7 @@ class CommandsHelper
      */
     public function output(ImageInterface $image, $outputFormat, $outputFile = null)
     {
-        Assert::oneOf($outputFormat, $this->allowedOutputFormats, 'Invalid output format: ' . $outputFormat);
+        Assert::oneOf($outputFormat, $this->outputFormats, 'Invalid output format: ' . $outputFormat);
 
         if ($outputFile) {
             $image->save($outputFile, array('format' => $outputFormat));
@@ -148,6 +148,15 @@ class CommandsHelper
         return $image;
     }
 
+    /**
+     * @param int $minWordLength
+     * @param int $maxWordLength
+     * @param null $changeCase
+     * @param bool $noRemoveNumbers
+     * @param bool $noRemoveUnwanted
+     * @param bool $noRemoveTrailing
+     * @return FiltersBuilder
+     */
     public function getFilterBuilder(
         $minWordLength,
         $maxWordLength,
@@ -169,6 +178,38 @@ class CommandsHelper
         }
 
         return $filtersBuilder;
+    }
+
+    /**
+     * @param WordsListBuilder $builder
+     * @param string $type
+     * @param string $file
+     * @param string $url
+     */
+    public function insertWords(WordsListBuilder $builder, $type, $file = null, $url = null)
+    {
+        Assert::true(null !== $file | null !== $url);
+        Assert::oneOf($type, array('from-url', 'from-file'), 'Invalid type for createCloud: ' . $type);
+
+        if ($type === 'from-file') {
+            Assert::fileExists($file, 'File not found: ' . $file);
+            $builder->importWords(file_get_contents($file));
+        } else {
+            $builder->importUrl($url);
+        }
+
+    }
+
+    /**
+     * @param WordsListBuilder $builder
+     * @param string $sortBy
+     * @param string $sortOrder
+     */
+    public function sortWords(WordsListBuilder $builder, $sortBy, $sortOrder)
+    {
+        if ($sortBy && $sortOrder) {
+            $builder->sort($sortBy, $sortOrder);
+        }
     }
 
     /**
@@ -213,20 +254,9 @@ class CommandsHelper
             ->randomizeOrientation($input->getOption('vertical-probability'))
         ;
 
-        if ($type === 'from-file') {
-            $file = $input->getArgument('file');
-            Assert::fileExists($file, 'File not found: ' . $file);
-            $listBuilder->importWords(file_get_contents($file));
-        } else {
-            $listBuilder->importUrl($input->getArgument('url'));
-        }
+        $this->insertWords($listBuilder, $type, $input->getArgument('file'), $input->getArgument('url'));
 
-        $sortBy = $input->getOption('sort-by');
-        $sortOrder = $input->getOption('sort-order');
-
-        if ($sortBy && $sortOrder) {
-            $listBuilder->sort($sortBy, $sortOrder);
-        }
+        $this->sortWords($listBuilder, $input->getOption('sort-by'), $input->getOption('sort-order'));
 
         // Apply a color generator if needed
         $colorGenerator = $this->getColorGenerator(
@@ -253,7 +283,7 @@ class CommandsHelper
             ->useList($list)
         ;
 
-        if ($input->getOption('precise')) {
+        if ($input->getOption('preLoggercise')) {
             $cloudBuilder->setPrecise();
         }
 

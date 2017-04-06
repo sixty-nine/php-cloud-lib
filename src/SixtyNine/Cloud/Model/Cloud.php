@@ -37,7 +37,7 @@ class Cloud
      */
     protected $words;
 
-    function __construct()
+    public function __construct()
     {
         $this->words = new ArrayCollection();
     }
@@ -96,7 +96,7 @@ class Cloud
      */
     public function removeWord(CloudWord $word)
     {
-        $this->words->remove($word);
+        $this->words->removeElement($word);
         return $this;
     }
 

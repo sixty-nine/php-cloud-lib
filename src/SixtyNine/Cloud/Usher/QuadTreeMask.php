@@ -11,6 +11,8 @@ class QuadTreeMask implements MaskInterface
 {
     /** @var QuadTree */
     protected $tree;
+    /** @var \SixtyNine\Cloud\Factory\Logger */
+    protected $logger;
 
     /**
      * @param int $width
@@ -22,6 +24,9 @@ class QuadTreeMask implements MaskInterface
         $this->tree = new QuadTree(new Box(0, 0, $width, $height));
     }
 
+    /**
+     * @return array
+     */
     public function getBoxes()
     {
         return $this->tree->getAllObjects();

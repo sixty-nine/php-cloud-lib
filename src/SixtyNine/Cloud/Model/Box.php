@@ -60,6 +60,12 @@ class Box
      */
     protected $right;
 
+    /**
+     * @param float $x
+     * @param float $y
+     * @param float $width
+     * @param float $height
+     */
     public function __construct($x, $y, $width, $height)
     {
         $this->x = $x;
@@ -70,6 +76,11 @@ class Box
         $this->update();
     }
 
+    /**
+     * @param PointInterface $point
+     * @param BoxInterface $box
+     * @return Box
+     */
     public static function constructFromImagine(PointInterface $point, BoxInterface $box)
     {
         return new self($point->getX(), $point->getY(), $box->getWidth(), $box->getHeight());
@@ -121,13 +132,17 @@ class Box
         return new self($this->getX() + $deltaX, $this->getY() + $deltaY, $this->getWidth(), $this->getHeight());
     }
 
-    public function resize($count)
+    /**
+     * @param int $increment
+     * @return Box
+     */
+    public function resize($increment)
     {
         return new self(
-            $this->getX() - $count,
-            $this->getY() - $count,
-            $this->getWidth() + 2 * $count,
-            $this->getHeight() + 2 * $count
+            $this->getX() - $increment,
+            $this->getY() - $increment,
+            $this->getWidth() + 2 * $increment,
+            $this->getHeight() + 2 * $increment
         );
     }
 
@@ -211,7 +226,10 @@ class Box
         return new \Imagine\Image\Box($this->getWidth(), $this->getHeight());
     }
 
-    function __toString()
+    /**
+     * @return string
+     */
+    public function __toString()
     {
         return sprintf('(%s, %s) x (%s, %s)', $this->x, $this->y, $this->width, $this->height);
     }

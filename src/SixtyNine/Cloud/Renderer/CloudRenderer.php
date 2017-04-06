@@ -52,6 +52,12 @@ class CloudRenderer
         return $drawer->getImage();
     }
 
+    /**
+     * @param ImageInterface $image
+     * @param PlacerInterface $placer
+     * @param string $color
+     * @param int $maxIterations
+     */
     public function renderUsher(
         ImageInterface $image,
         PlacerInterface $placer,

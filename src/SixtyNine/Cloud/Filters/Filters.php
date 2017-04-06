@@ -43,7 +43,7 @@ class Filters
 
     /**
      * @param string $word
-     * @return bool
+     * @return bool|string
      */
     public function apply($word)
     {

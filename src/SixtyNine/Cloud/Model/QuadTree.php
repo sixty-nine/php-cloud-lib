@@ -16,6 +16,10 @@ class QuadTree
     /** @var array QuadTree[] */
     protected $nodes;
 
+    /**
+     * @param Box $bounds
+     * @param int $level
+     */
     public function __construct(Box $bounds, $level = 0)
     {
         $this->level = $level;
@@ -39,6 +43,10 @@ class QuadTree
         $this->nodes[3] = new Quadtree(new Box($x + $subWidth, $y + $subHeight, $subWidth, $subHeight), $this->level + 1);
     }
 
+    /**
+     * @param Box $box
+     * @return int
+     */
     public function getIndex(Box $box)
     {
         $vMidpoint = $this->bounds->getX() + ($this->bounds->getWidth() / 2);
@@ -67,6 +75,9 @@ class QuadTree
         return -1;
     }
 
+    /**
+     * @param Box $box
+     */
     public function insert(Box $box)
     {
         if ($this->isSplited) {
@@ -94,6 +105,9 @@ class QuadTree
         }
     }
 
+    /**
+     * @return int
+     */
     public function count()
     {
         $count = $this->objects->count();
@@ -107,6 +121,10 @@ class QuadTree
         return $count;
     }
 
+    /**
+     * @param Box $box
+     * @return array
+     */
     public function retrieve(Box $box)
     {
         $return = array();
@@ -120,6 +138,10 @@ class QuadTree
         return $return;
     }
 
+    /**
+     * @param Box $box
+     * @return bool
+     */
     public function collides(Box $box)
     {
         foreach ($this->objects as $object) {
@@ -142,6 +164,9 @@ class QuadTree
         return false;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         $padding = str_repeat('  ', $this->level);

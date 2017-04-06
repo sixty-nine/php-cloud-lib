@@ -10,6 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class BuildFromFileCommand extends BaseCloudCommand
 {
+    /** {@inheritdoc} */
     protected function configure()
     {
         parent::configure();
@@ -20,6 +21,7 @@ class BuildFromFileCommand extends BaseCloudCommand
         ;
     }
 
+    /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $helper = new CommandsHelper();

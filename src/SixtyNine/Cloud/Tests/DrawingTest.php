@@ -193,6 +193,13 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
         $drawer->getImage()->save('/tmp/test5.png');
     }
 
+    /**
+     * @param ImageInterface $image
+     * @param PointInterface $pos
+     * @param int $width
+     * @param int $height
+     * @param string $color
+     */
     protected function drawBox(ImageInterface $image, PointInterface $pos, $width, $height, $color = '#ffffff')
     {
         $x = $pos->getX();
@@ -207,6 +214,11 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
         $image->draw()->polygon($points, new Color($color));
     }
 
+    /**
+     * @param int $x
+     * @param int $y
+     * @return Point
+     */
     protected function createPoint($x, $y)
     {
         $x = $x >= 0 ? $x : 0;

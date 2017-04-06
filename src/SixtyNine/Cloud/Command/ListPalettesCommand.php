@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListPalettesCommand extends Command
 {
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this
@@ -20,6 +21,7 @@ class ListPalettesCommand extends Command
         ;
     }
 
+    /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $palettesFile = __DIR__ . '/../Resources/palettes.yml';

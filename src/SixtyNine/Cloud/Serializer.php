@@ -8,6 +8,11 @@ use SixtyNine\Cloud\Model\WordsList;
 
 class Serializer
 {
+    /**
+     * @param WordsList $list
+     * @param bool $pretty
+     * @return string
+     */
     public function saveList(WordsList $list, $pretty = false)
     {
         $serializer = SerializerBuilder::create()->build();
@@ -15,6 +20,10 @@ class Serializer
         return $pretty ? $this->prettyJson($data) : $data;
     }
 
+    /**
+     * @param string $data
+     * @return WordsList
+     */
     public function loadList($data)
     {
         $serializer = SerializerBuilder::create()->build();
@@ -25,6 +34,11 @@ class Serializer
         return $list;
     }
 
+    /**
+     * @param Cloud $cloud
+     * @param bool $pretty
+     * @return string
+     */
     public function saveCloud(Cloud $cloud, $pretty = false)
     {
         $serializer = SerializerBuilder::create()->build();
@@ -32,6 +46,10 @@ class Serializer
         return $pretty ? $this->prettyJson($data) : $data;
     }
 
+    /**
+     * @param string $data
+     * @return Cloud
+     */
     public function loadCloud($data)
     {
         $serializer = SerializerBuilder::create()->build();
@@ -43,6 +61,10 @@ class Serializer
         return $cloud;
     }
 
+    /**
+     * @param string $data
+     * @return string
+     */
     public function prettyJson($data)
     {
         return json_encode(json_decode($data), JSON_PRETTY_PRINT);

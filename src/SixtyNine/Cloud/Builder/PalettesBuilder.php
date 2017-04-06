@@ -10,10 +10,16 @@ class PalettesBuilder
 {
     protected $palettes = array();
 
+    /**
+     * Disallow direct instantiation
+     */
     protected function __construct()
     {
     }
 
+    /**
+     * @return PalettesBuilder
+     */
     public static function create()
     {
         return new self();
@@ -89,6 +95,7 @@ class PalettesBuilder
 
     /**
      * @param array $colors
+     * @return \SixtyNine\Cloud\Model\Palette
      */
     public function getPalette(array $colors)
     {

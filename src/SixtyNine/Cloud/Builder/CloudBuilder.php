@@ -41,12 +41,16 @@ class CloudBuilder
     /** @var bool */
     protected $precise = false;
 
+    /**
+     * @param FontsFactory $fontsFactory
+     */
     protected function __construct(FontsFactory $fontsFactory)
     {
         $this->fontsFactory = $fontsFactory;
     }
 
     /**
+     * @param \SixtyNine\Cloud\Factory\FontsFactory $fontsFactory
      * @return CloudBuilder
      */
     public static function create(FontsFactory $fontsFactory)
@@ -66,24 +70,41 @@ class CloudBuilder
         return $this;
     }
 
+    /**
+     * @param string $color
+     * @return $this
+     */
     public function setBackgroundColor($color)
     {
         $this->backgroundColor = $color;
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setFont($name)
     {
         $this->font = $name;
         return $this;
     }
 
+    /**
+     * @param FontSizeGeneratorInterface $generator
+     * @return $this
+     */
     public function setSizeGenerator(FontSizeGeneratorInterface $generator)
     {
         $this->sizeGenerator = $generator;
         return $this;
     }
 
+    /**
+     * @param int $minSize
+     * @param int $maxSize
+     * @return $this
+     */
     public function setFontSizes($minSize, $maxSize)
     {
         $this->minFontSize = $minSize;
@@ -91,6 +112,10 @@ class CloudBuilder
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function setPlacer($name)
     {
         Assert::oneOf($name, PlacerFactory::getInstance()->getPlacersNames(), 'Placer not found: ' . $name);
@@ -98,17 +123,28 @@ class CloudBuilder
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function setPrecise()
     {
         $this->precise = true;
+        return $this;
     }
 
+    /**
+     * @param WordsList $list
+     * @return $this
+     */
     public function useList(WordsList $list)
     {
         $this->list = $list;
         return $this;
     }
 
+    /**
+     * @return Cloud
+     */
     public function build()
     {
         Assert::notNull($this->font, 'Font not set');
@@ -129,6 +165,11 @@ class CloudBuilder
         return $cloud;
     }
 
+    /**
+     * @param Cloud $cloud
+     * @param WordsList $list
+     * @return $this
+     */
     protected function addWords(Cloud $cloud, WordsList $list)
     {
         $words = $list->getWordsOrdered();
@@ -156,6 +197,9 @@ class CloudBuilder
         return $this;
     }
 
+    /**
+     * @param Cloud $cloud
+     */
     protected function placeWords(Cloud $cloud)
     {
         $placer = $this->placerName

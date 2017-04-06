@@ -4,7 +4,6 @@ namespace SixtyNine\Cloud\Tests\Usher;
 
 use Imagine\Image\Point;
 use SixtyNine\Cloud\Factory\FontsFactory;
-use SixtyNine\Cloud\Factory\Logger;
 use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Usher\Usher;

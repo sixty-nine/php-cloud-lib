@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ListFontsCommand extends Command
 {
+    /** {@inheritdoc} */
     protected function configure()
     {
         $this
@@ -20,6 +21,7 @@ class ListFontsCommand extends Command
         ;
     }
 
+    /** {@inheritdoc} */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $fontsPath = $input->getOption('fonts-path')
