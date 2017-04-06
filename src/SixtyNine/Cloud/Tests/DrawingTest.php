@@ -153,6 +153,46 @@ class DrawingTest extends \PHPUnit_Framework_TestCase
         $drawer->getImage()->save('/tmp/test4.png');
     }
 
+    public function testDrawingWithPreciseUsher()
+    {
+        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
+        $metrics = new FontMetrics($factory);
+        $placer = PlacerFactory::getInstance()->getPlacer(PlacerFactory::PLACER_CIRCULAR, 400, 400, 5);
+        $usher = new Usher(400, 400, $placer, $metrics);
+        $drawer = Drawer::create($factory)
+            ->createImage(400, 400, '#000000')
+            ->setFont('Arial.ttf')
+        ;
+
+        (new CloudRenderer())->renderUsher($drawer->getImage(), $placer, '#202020');
+
+        $words = array(
+            array('first', 50, 0, '#ff0000'),
+            array('second', 20, 270, '#0000ff'),
+            array('third', 24, 0, '#00ff00'),
+            array('fourth', 36, 270, '#00ffff'),
+            array('fifth', 36, 0, '#ff00ff'),
+            array('sixth', 40, 0, '#ffff00'),
+            array('seventh', 24, 270, '#aaaaaa'),
+        );
+
+        foreach ($words as $values) {
+            $place = $usher->getPlace($values[0], 'Arial.ttf', $values[1], $values[2], true);
+            if ($place) {
+                if ($values[2] === 0) {
+                    $drawer->drawText($place->getX(), $place->getY(), $values[0], $values[1], $values[3], $values[2]);
+                } else {
+                    $drawer->drawText($place->getX() + $place->getWidth(), $place->getY() + $place->getHeight() - $values[1], $values[0], $values[1], $values[3], $values[2]);
+                }
+                $drawer->drawBox($place->getX(), $place->getY(), $place->getWidth(), $place->getHeight(), $values[3]);
+            }
+        }
+
+        $drawer->drawMask($usher->getMask(), '#ffffff');
+
+        $drawer->getImage()->save('/tmp/test5.png');
+    }
+
     protected function drawBox(ImageInterface $image, PointInterface $pos, $width, $height, $color = '#ffffff')
     {
         $x = $pos->getX();

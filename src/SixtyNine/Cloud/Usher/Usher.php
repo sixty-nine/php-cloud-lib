@@ -62,21 +62,21 @@ class Usher
      * @param int $angle
      * @return bool|Box
      */
-    public function getPlace($word, $font, $size, $angle, $precise = false)
+    public function getPlace($word, $font, $fontSize, $angle, $precise = false)
     {
         $this->logger->log(
             sprintf(
                 'Search place for "%s", font = %s(%s), angle = %s',
                 $word,
                 str_replace('.ttf', '', $font),
-                $size,
+                $fontSize,
                 $angle
             ),
             Logger::DEBUG
         );
 
         $bounds = new Box(0, 0, $this->imgWidth, $this->imgHeight);
-        $size = $this->metrics->calculateSize($word, $font, $size);
+        $size = $this->metrics->calculateSize($word, $font, $fontSize);
         $box = Drawer::getBoxFoxText(0, 0, $size->getWidth(), $size->getHeight(), $angle);
 
         $this->logger->log('  Text dimensions: ' . $size->getDimensions(), Logger::DEBUG);
@@ -85,7 +85,7 @@ class Usher
 
         if ($place) {
             if ($precise) {
-                $this->addWordToMask($word, $place, $font, $size, $angle);
+                $this->addWordToMask($word, $place, $font, $fontSize, $angle);
             } else {
                 $this->mask->add(new Point(0, 0), $place, $angle);
             }
@@ -100,14 +100,29 @@ class Usher
         $base = $this->metrics->calculateSize($word, $font, $size, $angle);
         foreach (str_split($word) as $letter) {
             $box = $this->metrics->calculateSize($letter, $font, $size);
-            $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
-            $this->mask->add($newPos, $box, $angle);
 
             if ($angle === 0) {
+                $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
+                $this->mask->add($newPos, $box, $angle);
                 $place = $place->move($box->getWidth(), 0);
             } else {
-                // FIXME: this is wrong
-                $place = $place->move(0, $box->getHeight());
+                // Invert width and height
+                $box = new Box(0, 0, $box->getHeight(), $box->getWidth());
+
+                if ($place->getY() + ($base->getHeight() - $box->getHeight()) < 0) {
+                    continue;
+                }
+
+                if ($place->getX() + ($base->getWidth() - $box->getWidth()) < 0) {
+                    continue;
+                }
+
+                $newPos = new Point(
+                    $place->getX() + ($base->getWidth() - $box->getWidth()),
+                    $place->getY() + ($base->getHeight() - $box->getHeight())
+                );
+                $this->mask->add($newPos, $box, $angle);
+                $place = $place->move(0, -$box->getHeight());
             }
         }
     }
