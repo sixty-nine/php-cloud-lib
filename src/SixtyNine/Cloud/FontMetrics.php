@@ -3,7 +3,7 @@
 namespace SixtyNine\Cloud;
 
 use SixtyNine\Cloud\Factory\FontsFactory;
-use SixtyNine\Cloud\Model\Box;
+use SixtyNine\DataTypes\Box;
 
 class FontMetrics
 {

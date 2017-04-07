@@ -3,7 +3,7 @@
 namespace SixtyNine\Cloud\Usher;
 
 use Imagine\Image\PointInterface;
-use SixtyNine\Cloud\Model\Box;
+use SixtyNine\DataTypes\Box;
 
 interface MaskInterface
 {

@@ -4,8 +4,8 @@ namespace SixtyNine\Cloud\Usher;
 
 use Imagine\Image\PointInterface;
 use SixtyNine\Cloud\Factory\Logger;
-use SixtyNine\Cloud\Model\Box;
-use SixtyNine\Cloud\Model\QuadTree;
+use SixtyNine\DataTypes\Box;
+use SixtyNine\DataTypes\QuadTree;
 
 class QuadTreeMask implements MaskInterface
 {
