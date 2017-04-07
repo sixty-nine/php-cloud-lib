@@ -46,17 +46,6 @@ class DebugUsherCommand extends Command
         $renderer = new CloudRenderer($cloud, FontsFactory::create(BASE_PATH . '/fonts'));
         $placerName = $helper->getPlacer($input->getArgument('placer'));
 
-        $imagine = new Imagine();
-        $image = $imagine->create(
-            new Box(
-                $input->getOption('width'),
-                $input->getOption('height')
-            ),
-            new Color(
-                $input->getOption('background-color')
-            )
-        );
-
         $placer = PlacerFactory::getInstance()->getPlacer(
             $placerName,
             $input->getOption('width'),
