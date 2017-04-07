@@ -6,7 +6,7 @@ use Imagine\Image\Point;
 use SixtyNine\Cloud\Drawer\Drawer;
 use SixtyNine\Cloud\Factory\Logger;
 use SixtyNine\Cloud\FontMetrics;
-use SixtyNine\Cloud\Model\Box;
+use SixtyNine\DataTypes\Box;
 use SixtyNine\Cloud\Placer\PlacerInterface;
 
 /**
@@ -137,8 +137,8 @@ class Usher
 
     /**
      * Search a free place for a new box.
-     * @param \SixtyNine\Cloud\Model\Box $bounds
-     * @param \SixtyNine\Cloud\Model\Box $box
+     * @param \SixtyNine\DataTypes\Box $bounds
+     * @param \SixtyNine\DataTypes\Box $box
      * @return bool|Box
      */
     protected function searchPlace(Box $bounds, Box $box)

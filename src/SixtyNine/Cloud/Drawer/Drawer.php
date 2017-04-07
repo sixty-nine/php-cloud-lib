@@ -7,7 +7,7 @@ use Imagine\Image\Box;
 use Imagine\Image\Color;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
-use SixtyNine\Cloud\Model\Box as MyBox;
+use SixtyNine\DataTypes\Box as MyBox;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Usher\MaskInterface;
 use Webmozart\Assert\Assert;
