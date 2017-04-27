@@ -26,7 +26,7 @@
         "monolog/monolog": "^1.22",
         "webmozart/assert": "^1.2",
         "symfony/stopwatch": "^3.2",
-        "sixty-nine/php-data-types": "dev-master"
+        "sixty-nine/php-data-types": "0.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^4.8"
