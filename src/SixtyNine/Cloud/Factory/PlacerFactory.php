@@ -86,7 +86,7 @@ class PlacerFactory
      * @return PlacerInterface
      * @throws \InvalidArgumentException
      */
-    protected function getPlacerClass($name)
+    public function getPlacerClass($name)
     {
         Assert::keyExists($this->placers, $name, 'Placer not found: ' . $name);
         return $this->placers[$name];

@@ -3,6 +3,7 @@
 namespace SixtyNine\Cloud\Model;
 
 use JMS\Serializer\Annotation as JMS;
+use SixtyNine\DataTypes\Box;
 
 class CloudWord
 {
@@ -197,7 +198,7 @@ class CloudWord
     }
 
     /**
-     * @return array
+     * @return Box
      */
     public function getBox()
     {

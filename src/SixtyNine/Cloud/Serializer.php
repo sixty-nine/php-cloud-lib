@@ -4,6 +4,8 @@ namespace SixtyNine\Cloud;
 
 use JMS\Serializer\SerializerBuilder;
 use SixtyNine\Cloud\Model\Cloud;
+use SixtyNine\Cloud\Model\CloudWord;
+use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
 
 class Serializer
@@ -28,6 +30,7 @@ class Serializer
     {
         $serializer = SerializerBuilder::create()->build();
         $list = $serializer->deserialize($data, WordsList::class, 'json');
+        /** @var Word $word */
         foreach ($list->getWords() as $word) {
             $word->setList($list);
         }
@@ -54,9 +57,12 @@ class Serializer
     {
         $serializer = SerializerBuilder::create()->build();
         $cloud = $serializer->deserialize($data, Cloud::class, 'json');
+        /** @var CloudWord $word */
         foreach ($cloud->getWords() as $word) {
+            $box = $word->getBox();
             $word->setCloud($cloud);
-            $word->getBox()->update();
+            $box->update();
+            $word->setPosition(array((int)$box->getX(), (int)$box->getY()));
         }
         return $cloud;
     }

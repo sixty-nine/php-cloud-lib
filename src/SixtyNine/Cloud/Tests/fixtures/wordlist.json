@@ -1,0 +1,19 @@
+{
+    "name": "foobar",
+    "words": [
+        {
+            "text": "foo",
+            "count": 10,
+            "orientation": "horizontal",
+            "color": "#000000",
+            "position": 1
+        },
+        {
+            "text": "bar",
+            "count": 20,
+            "orientation": "vertical",
+            "color": "#ffffff",
+            "position": 0
+        }
+    ]
+}
