@@ -29,7 +29,7 @@ class CloudRenderer
     {
         $this->cloud = $cloud;
         $this->drawer = Drawer::create($fontsFactory)
-            ->createImage($cloud->getWidth(), $cloud->getHeight(), $cloud->getBackgroundColor())
+            ->createImage($cloud->getWidth(), $cloud->getHeight(), $cloud->getBackgroundColor(), $cloud->getBackgroundOpacity())
             ->setFont($cloud->getFont())
         ;
     }

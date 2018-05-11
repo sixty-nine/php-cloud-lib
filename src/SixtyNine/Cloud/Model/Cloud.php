@@ -14,6 +14,12 @@ class Cloud
     protected $backgroundColor;
 
     /**
+     * @var string
+     * @JMS\Type("double")
+     */
+    protected $backgroundOpacity;
+
+    /**
      * @var int
      * @JMS\Type("integer")
      */
@@ -58,6 +64,24 @@ class Cloud
     public function getBackgroundColor()
     {
         return $this->backgroundColor;
+    }
+
+    /**
+     * @param int $backgroundOpacity
+     * @return Cloud
+     */
+    public function setBackgroundOpacity($backgroundOpacity)
+    {
+        $this->backgroundOpacity = $backgroundOpacity;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBackgroundOpacity()
+    {
+        return $this->backgroundOpacity;
     }
 
     /**
