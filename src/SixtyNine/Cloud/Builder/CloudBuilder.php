@@ -29,6 +29,8 @@ class CloudBuilder
     protected $font;
     /** @var string */
     protected $backgroundColor = '#ffffff';
+    /** @var int */
+    protected $backgroundOpacity = 100;
     /** @var FontSizeGeneratorInterface */
     protected $sizeGenerator;
     /** @var string */
@@ -80,6 +82,16 @@ class CloudBuilder
     public function setBackgroundColor($color)
     {
         $this->backgroundColor = $color;
+        return $this;
+    }
+
+    /**
+     * @param int $opacity
+     * @return $this
+     */
+    public function setBackgroundOpacity($opacity)
+    {
+        $this->backgroundOpacity = $opacity;
         return $this;
     }
 
@@ -158,6 +170,7 @@ class CloudBuilder
             ->setWidth($this->width)
             ->setHeight($this->height)
             ->setBackgroundColor($this->backgroundColor)
+            ->setBackgroundOpacity($this->backgroundOpacity)
         ;
 
         if ($this->list) {

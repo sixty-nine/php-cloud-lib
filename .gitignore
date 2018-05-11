@@ -4,3 +4,4 @@ fonts/*
 bin/*
 !bin/clouder
 composer.lock
+.idea

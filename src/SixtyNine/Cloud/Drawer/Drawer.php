@@ -48,13 +48,14 @@ class Drawer
      * @param int $width
      * @param int $height
      * @param string $color
+     * @param int $opacity
      * @return Drawer
      */
-    public function createImage($width, $height, $color = '#FFFFFF')
+    public function createImage($width, $height, $color = '#FFFFFF', $opacity = 100)
     {
         $this->image = $this->imagine->create(
             new Box($width, $height),
-            new Color($color)
+            new Color($color, abs($opacity - 100))
         );
         return $this;
     }

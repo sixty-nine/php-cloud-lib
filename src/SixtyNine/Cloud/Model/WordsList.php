@@ -134,7 +134,7 @@ class WordsList
     public function sortWords($sortBy, $sortOrder)
     {
         Assert::oneOf($sortBy, $this->allowedSortBy, 'Invalid sort by: ' . $sortBy);
-        Assert::oneOf($sortOrder, $this->allowedSortOrder, 'Invalid sort order: ' - $sortOrder);
+        Assert::oneOf($sortOrder, $this->allowedSortOrder, 'Invalid sort order: ' . $sortOrder);
 
         $sorter = function ($a, $b) use ($sortBy, $sortOrder) {
             $method = $sortBy === self::SORT_ANGLE
