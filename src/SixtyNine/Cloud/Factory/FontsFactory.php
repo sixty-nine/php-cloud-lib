@@ -39,7 +39,7 @@ class FontsFactory
 
     public function loadFonts()
     {
-        foreach (glob($this->fontsPath . "/*.ttf") as $filename) {
+        foreach (glob($this->fontsPath . '/*.{ttf,otf}', GLOB_BRACE) as $filename) {
             $name = basename($filename);
             $this->fonts[$name] = new Font($name, realpath($filename));
         }
