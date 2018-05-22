@@ -42,4 +42,22 @@ class FontMetricsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($size4->getWidth(), $size3->getWidth());
         $this->assertTrue($size4->getHeight() <  $size3->getHeight());
     }
+
+    public function testLoadSingleFont()
+    {
+        $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts/Arial.ttf', false);
+        $calc = new FontMetrics($factory);
+        $size1 = $calc->calculateSize('abc', 'Arial.ttf', 10, 270);
+        $size2 = $calc->calculateSize('abc', 'Arial.ttf', 12, 270);
+        $this->assertTrue($size1->getWidth() < $size2->getWidth());
+    }
+
+    public function testLoadMultipleFonts()
+    {
+        $factory = FontsFactory::create([__DIR__ . '/fixtures/fonts/Arial.ttf'], false);
+        $calc = new FontMetrics($factory);
+        $size1 = $calc->calculateSize('abc', 'Arial.ttf', 10, 270);
+        $size2 = $calc->calculateSize('abc', 'Arial.ttf', 12, 270);
+        $this->assertTrue($size1->getWidth() < $size2->getWidth());
+    }
 }

@@ -13,36 +13,64 @@ use Webmozart\Assert\Assert;
 
 class FontsFactory
 {
-    /** @var string */
-    protected $fontsPath;
     /** @var array */
     protected $fonts = array();
 
     /**
-     * @param string $fontsPath
+     * Initialize the FontsFactory.
+     *
+     * If $isFontPath is true then the first parameter is considered as a path to
+     * a directory containing the fonts. This directory is scanned for TTF and OTF
+     * fonts.
+     *
+     * If $isFontPath is false, then the first parameter must contain a path to
+     * a TTF/ODF font, or must be an array of those paths.
+     *
+     * @param string|array $fonts
+     * @param bool $isFontPath
      */
-    protected function __construct($fontsPath)
+    protected function __construct($fonts, $isFontPath = true)
     {
-        $this->fontsPath = $fontsPath;
-        $this->loadFonts();
+        if ($isFontPath) {
+            $this->loadFonts($fonts);
+            return;
+        }
+
+        $fonts = is_array($fonts) ? $fonts : [$fonts];
+        foreach ($fonts as $font) {
+            $this->addFont($font);
+        }
+    }
+
+    /**
+     * @param string $fonts
+     * @param bool $isFontPath
+     * @return FontsFactory
+     */
+    public static function create($fonts, $isFontPath = true)
+    {
+        return new self($fonts, $isFontPath);
     }
 
     /**
      * @param string $fontsPath
-     * @return FontsFactory
      */
-    public  static function create($fontsPath)
+    public function loadFonts($fontsPath)
     {
         Assert::fileExists($fontsPath, 'The fonts path must exist');
-        return new self($fontsPath);
+        foreach (glob($fontsPath . '/*.{ttf,otf}', GLOB_BRACE) as $filename) {
+            $this->addFont($filename);
+        }
     }
 
-    public function loadFonts()
+    /**
+     * @param string $filename
+     */
+    protected function addFont($filename)
     {
-        foreach (glob($this->fontsPath . '/*.{ttf,otf}', GLOB_BRACE) as $filename) {
-            $name = basename($filename);
-            $this->fonts[$name] = realpath($filename);
-        }
+        Assert::fileExists($filename, 'The font file must exist');
+        $name = basename($filename);
+        $this->fonts[$name] = realpath($filename);
     }
 
     /**
