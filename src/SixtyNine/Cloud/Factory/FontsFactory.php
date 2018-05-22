@@ -3,23 +3,21 @@
 
 namespace SixtyNine\Cloud\Factory;
 
-use Imagine\Gd\Imagine;
-use Imagine\Image\Box;
 use Imagine\Image\Color;
-use Imagine\Image\Point;
 use Imagine\Gd\Font as ImagineFont;
 use SixtyNine\Cloud\Model\Font;
 use Webmozart\Assert\Assert;
 
 class FontsFactory
 {
-    /** @var string */
-    protected $fontsPath;
+    /** @var string|array */
+    private $fontsPath;
+
     /** @var array */
     protected $fonts = array();
 
     /**
-     * @param string $fontsPath
+     * @param string|array $fontsPath string to scan directory with .ttf file extension or array with full path to each font
      */
     protected function __construct($fontsPath)
     {
@@ -28,18 +26,22 @@ class FontsFactory
     }
 
     /**
-     * @param string $fontsPath
+     * @param string|array $fontsPath string to scan directory with .ttf file extension or array with full path to each font
      * @return FontsFactory
      */
-    public  static function create($fontsPath)
+    public static function create($fontsPath)
     {
-        Assert::fileExists($fontsPath, 'The fonts path must exist');
         return new self($fontsPath);
     }
 
     public function loadFonts()
     {
-        foreach (glob($this->fontsPath . "/*.ttf") as $filename) {
+        $fontsPath = $this->fontsPath;
+        if (is_string($fontsPath)) {
+            Assert::fileExists($fontsPath, 'The fonts path must exist');
+            $fontsPath = glob($fontsPath . "/*.ttf");
+        }
+        foreach ($fontsPath as $filename) {
             $name = basename($filename);
             $this->fonts[$name] = new Font($name, realpath($filename));
         }
