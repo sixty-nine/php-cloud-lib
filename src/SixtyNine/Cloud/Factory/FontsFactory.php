@@ -41,7 +41,7 @@ class FontsFactory
     {
         foreach (glob($this->fontsPath . '/*.{ttf,otf}', GLOB_BRACE) as $filename) {
             $name = basename($filename);
-            $this->fonts[$name] = new Font($name, realpath($filename));
+            $this->fonts[$name] = realpath($filename);
         }
     }
 
@@ -53,7 +53,7 @@ class FontsFactory
     public function getFont($name)
     {
         Assert::keyExists($this->fonts, $name, 'Font not found: ' . $name);
-        return $this->fonts[$name];
+        return new Font($name, $this->fonts[$name]);
     }
 
     /**
