@@ -78,22 +78,23 @@ class Usher
 
         $bounds = new Box(0, 0, $this->imgWidth, $this->imgHeight);
         $size = $this->metrics->calculateSize($word, $font, $fontSize);
-        $box = Drawer::getBoxFoxText(0, 0, $size->getWidth(), $size->getHeight(), $angle);
+        $box = Drawer::getBoxForText(0, 0, $size->getWidth(), $size->getHeight(), $angle);
 
         $this->logger->log('  Text dimensions: ' . $size->getDimensions(), Logger::DEBUG);
 
         $place = $this->searchPlace($bounds, $box);
 
-        if ($place) {
-            if ($precise) {
-                $this->addWordToMask($word, $place, $font, $fontSize, $angle);
-            } else {
-                $this->mask->add(new Point(0, 0), $place);
-            }
+        if (!$place) {
+            return false;
+        }
+
+        if ($precise) {
+            $this->addWordToMask($word, $place, $font, $fontSize, $angle);
             return $place;
         }
 
-        return false;
+        $this->mask->add(new Point(0, 0), $place);
+        return $place;
     }
 
     /**
@@ -113,25 +114,26 @@ class Usher
                 $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
                 $this->mask->add($newPos, $box, $angle);
                 $place = $place->move($box->getWidth(), 0);
-            } else {
-                // Invert width and height
-                $box = new Box(0, 0, $box->getHeight(), $box->getWidth());
-
-                if ($place->getY() + ($base->getHeight() - $box->getHeight()) < 0) {
-                    continue;
-                }
-
-                if ($place->getX() + ($base->getWidth() - $box->getWidth()) < 0) {
-                    continue;
-                }
-
-                $newPos = new Point(
-                    $place->getX() + ($base->getWidth() - $box->getWidth()),
-                    $place->getY() + ($base->getHeight() - $box->getHeight())
-                );
-                $this->mask->add($newPos, $box);
-                $place = $place->move(0, -$box->getHeight());
+                continue;
             }
+
+            // Invert width and height
+            $box = new Box(0, 0, $box->getHeight(), $box->getWidth());
+
+            if ($place->getY() + ($base->getHeight() - $box->getHeight()) < 0) {
+                continue;
+            }
+
+            if ($place->getX() + ($base->getWidth() - $box->getWidth()) < 0) {
+                continue;
+            }
+
+            $newPos = new Point(
+                $place->getX() + ($base->getWidth() - $box->getWidth()),
+                $place->getY() + ($base->getHeight() - $box->getHeight())
+            );
+            $this->mask->add($newPos, $box);
+            $place = $place->move(0, -$box->getHeight());
         }
     }
 

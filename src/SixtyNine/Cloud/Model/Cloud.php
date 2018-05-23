@@ -14,8 +14,8 @@ class Cloud
     protected $backgroundColor;
 
     /**
-     * @var string
-     * @JMS\Type("double")
+     * @var int
+     * @JMS\Type("integer")
      */
     protected $backgroundOpacity;
 

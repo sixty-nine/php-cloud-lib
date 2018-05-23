@@ -132,7 +132,7 @@ class Drawer
      */
     public function drawBoxForText($x, $y, $width, $height, $angle, $color = '#000000')
     {
-        $box = self::getBoxFoxText($x, $y, $width, $height, $angle);
+        $box = self::getBoxForText($x, $y, $width, $height, $angle);
         return $this->drawBox($box->getX(), $box->getY(), $box->getWidth(), $box->getHeight(), $color);
     }
 
@@ -144,7 +144,7 @@ class Drawer
      * @param int $angle
      * @return MyBox
      */
-    public static function getBoxFoxText($x, $y, $width, $height, $angle)
+    public static function getBoxForText($x, $y, $width, $height, $angle)
     {
         switch ($angle) {
             case 90:
