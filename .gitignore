@@ -3,5 +3,4 @@ fonts/*
 !fonts/.gitkeep
 bin/*
 !bin/clouder
-composer.lock
 .idea
