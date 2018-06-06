@@ -197,6 +197,11 @@ class CloudBuilder
 
         /** @var Word $word */
         foreach ($words as $word) {
+
+            if (!$word->getCount()) {
+                continue;
+            }
+
             $cloudWord = new CloudWord();
             $cloudWord
                 ->setCloud($cloud)

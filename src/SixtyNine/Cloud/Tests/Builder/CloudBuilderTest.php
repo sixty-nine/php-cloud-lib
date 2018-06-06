@@ -4,6 +4,8 @@ namespace SixtyNine\Cloud\Tests\Builder;
 
 use SixtyNine\Cloud\Builder\CloudBuilder;
 use SixtyNine\Cloud\Builder\WordsListBuilder;
+use SixtyNine\Cloud\Model\WordsList;
+use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Model\Cloud;
 use PHPUnit\Framework\TestCase;
@@ -37,5 +39,19 @@ class CloudBuilderTest extends TestCase
         ;
 
         $this->assertCount(3, $cloud->getWords());
+    }
+
+    public function testWordNeverUsedShouldNotBreakBuilder()
+    {
+        $list = new WordsList();
+        $list->addWord((new Word())->setCount(0)->setText('1'));
+        $factory = FontsFactory::create(__DIR__ . '/../fixtures/fonts');
+        $cloud = CloudBuilder::create($factory)
+            ->setFont('Arial.ttf')
+            ->useList($list)
+            ->build()
+        ;
+
+        $this->assertTrue(true); // If the code above didn't make a division by zero then it's ok...
     }
 }
