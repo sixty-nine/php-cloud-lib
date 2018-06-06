@@ -10,8 +10,9 @@ use SixtyNine\Cloud\Filters\RemoveByLength;
 use SixtyNine\Cloud\Filters\RemoveCharacters;
 use SixtyNine\Cloud\Filters\RemoveNumbers;
 use SixtyNine\Cloud\Filters\RemoveTrailingCharacters;
+use PHPUnit\Framework\TestCase;
 
-class FiltersBuilderTest extends \PHPUnit_Framework_TestCase
+class FiltersBuilderTest extends TestCase
 {
     public function testConstructor()
     {

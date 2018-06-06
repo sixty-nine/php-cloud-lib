@@ -14,8 +14,9 @@ use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
 use SixtyNine\Cloud\Serializer;
 use SixtyNine\DataTypes\Box;
+use PHPUnit\Framework\TestCase;
 
-class SerializerTest extends \PHPUnit_Framework_TestCase
+class SerializerTest extends TestCase
 {
     public function testSaveLoadList()
     {

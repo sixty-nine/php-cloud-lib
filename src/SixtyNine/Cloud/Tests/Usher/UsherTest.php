@@ -8,8 +8,9 @@ use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Usher\Usher;
 use SixtyNine\DataTypes\Vector;
+use PHPUnit\Framework\TestCase;
 
-class UsherTest extends \PHPUnit_Framework_TestCase
+class UsherTest extends TestCase
 {
     public function testLinearUsher()
     {

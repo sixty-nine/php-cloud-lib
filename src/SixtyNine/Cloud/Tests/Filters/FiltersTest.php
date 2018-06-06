@@ -12,8 +12,9 @@ use SixtyNine\Cloud\Filters\RemoveNumbers;
 use SixtyNine\Cloud\Filters\RemoveTrailingCharacters;
 use SixtyNine\Cloud\Filters\RemoveWords;
 use SixtyNine\Cloud\Model\Word;
+use PHPUnit\Framework\TestCase;
 
-class FiltersTest extends \PHPUnit_Framework_TestCase
+class FiltersTest extends TestCase
 {
     /**
      * @param $filter
@@ -104,4 +105,3 @@ class FiltersTest extends \PHPUnit_Framework_TestCase
         return (new Word())->setText($text);
     }
 }
- 

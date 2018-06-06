@@ -3,8 +3,9 @@
 namespace SixtyNine\Cloud\Tests\Model;
 
 use SixtyNine\Cloud\Model\WordsList;
+use PHPUnit\Framework\TestCase;
 
-class WordsListTest extends \PHPUnit_Framework_TestCase
+class WordsListTest extends TestCase
 {
     public function testImportWords()
     {
