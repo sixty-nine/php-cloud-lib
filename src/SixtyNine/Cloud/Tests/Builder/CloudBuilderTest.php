@@ -6,8 +6,9 @@ use SixtyNine\Cloud\Builder\CloudBuilder;
 use SixtyNine\Cloud\Builder\WordsListBuilder;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Model\Cloud;
+use PHPUnit\Framework\TestCase;
 
-class CloudBuilderTest extends \PHPUnit_Framework_TestCase
+class CloudBuilderTest extends TestCase
 {
     public function testConstructor()
     {

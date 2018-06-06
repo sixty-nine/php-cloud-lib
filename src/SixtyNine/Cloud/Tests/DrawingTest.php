@@ -15,8 +15,9 @@ use SixtyNine\Cloud\FontMetrics;
 use SixtyNine\Cloud\Model\Cloud;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
 use SixtyNine\Cloud\Usher\Usher;
+use PHPUnit\Framework\TestCase;
 
-class DrawingTest extends \PHPUnit_Framework_TestCase
+class DrawingTest extends TestCase
 {
     /**
      * Illustrate the difficulty to properly draw a bounding box around rotated text with Imagine.

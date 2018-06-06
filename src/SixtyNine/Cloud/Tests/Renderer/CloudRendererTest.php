@@ -11,8 +11,9 @@ use SixtyNine\Cloud\Color\RandomColorGenerator;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\Renderer\CloudRenderer;
+use PHPUnit\Framework\TestCase;
 
-class CloudRendererTest extends \PHPUnit_Framework_TestCase
+class CloudRendererTest extends TestCase
 {
     public function testRender()
     {

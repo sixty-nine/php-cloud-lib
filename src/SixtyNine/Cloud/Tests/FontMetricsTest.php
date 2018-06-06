@@ -4,8 +4,9 @@ namespace SixtyNine\Cloud\Tests\Builder;
 
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\FontMetrics;
+use PHPUnit\Framework\TestCase;
 
-class FontMetricsTest extends \PHPUnit_Framework_TestCase
+class FontMetricsTest extends TestCase
 {
     public function testMetricsHorizontal()
     {

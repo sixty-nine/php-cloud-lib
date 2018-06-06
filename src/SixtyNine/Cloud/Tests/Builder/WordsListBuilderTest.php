@@ -6,8 +6,9 @@ use SixtyNine\Cloud\Builder\FiltersBuilder;
 use SixtyNine\Cloud\Builder\WordsListBuilder;
 use SixtyNine\Cloud\Model\Word;
 use SixtyNine\Cloud\Model\WordsList;
+use PHPUnit\Framework\TestCase;
 
-class WordsListBuilderTest extends \PHPUnit_Framework_TestCase
+class WordsListBuilderTest extends TestCase
 {
     public function testConstructor()
     {
