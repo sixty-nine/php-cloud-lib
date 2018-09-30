@@ -158,7 +158,7 @@ class DrawingTest extends TestCase
         $factory = FontsFactory::create(__DIR__ . '/fixtures/fonts');
         $metrics = new FontMetrics($factory);
         $placer = PlacerFactory::getInstance()->getPlacer(PlacerFactory::PLACER_CIRCULAR, 400, 400, 5);
-        $usher = new Usher(400, 400, $placer, $metrics);
+        $usher = new Usher(400, 400, $placer, $metrics, true);
         $drawer = Drawer::create($factory)
             ->createImage(400, 400, '#000000')
             ->setFont('Arial.ttf')
@@ -175,7 +175,7 @@ class DrawingTest extends TestCase
         );
 
         foreach ($words as $values) {
-            $place = $usher->getPlace($values[0], 'Arial.ttf', $values[1], $values[2], true);
+            $place = $usher->getPlace($values[0], 'Arial.ttf', $values[1], $values[2]);
             if ($place) {
                 if ($values[2] === 0) {
                     $drawer->drawText($place->getX(), $place->getY(), $values[0], $values[1], $values[3], $values[2]);

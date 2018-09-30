@@ -230,12 +230,12 @@ class CloudBuilder
         ;
 
         $metrics = new FontMetrics($this->fontsFactory);
-        $usher = new Usher($cloud->getWidth(), $cloud->getHeight(), $placer, $metrics);
+        $usher = new Usher($cloud->getWidth(), $cloud->getHeight(), $placer, $metrics, $this->precise);
 
         /** @var CloudWord $word */
         foreach ($cloud->getWords() as $word) {
 
-            $place = $usher->getPlace($word->getText(), $cloud->getFont(), $word->getSize(), $word->getAngle(), $this->precise);
+            $place = $usher->getPlace($word->getText(), $cloud->getFont(), $word->getSize(), $word->getAngle());
 
             $word->setIsVisible((bool)$place);
 

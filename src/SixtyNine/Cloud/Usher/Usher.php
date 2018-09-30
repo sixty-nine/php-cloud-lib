@@ -29,6 +29,9 @@ class Usher
     /** @var \SixtyNine\Cloud\FontMetrics */
     protected $metrics;
 
+    /** @var int */
+    protected $precise;
+
     /** @var Logger */
     protected $logger;
 
@@ -37,6 +40,7 @@ class Usher
      * @param int $imgHeight
      * @param PlacerInterface $placer
      * @param FontMetrics $metrics
+     * @param bool $precise
      * @param int $maxTries
      */
     public function __construct(
@@ -44,15 +48,21 @@ class Usher
         $imgHeight,
         PlacerInterface $placer,
         FontMetrics $metrics,
+        $precise = false,
         $maxTries = self::DEFAULT_MAX_TRIES
     ) {
-        $this->mask = new QuadTreeMask($imgWidth, $imgHeight);
         $this->metrics = $metrics;
         $this->imgHeight = $imgHeight;
         $this->imgWidth = $imgWidth;
         $this->maxTries = $maxTries;
         $this->placer = $placer;
         $this->logger = Logger::getInstance();
+        $this->precise = $precise;
+
+        $this->mask = $precise
+            ? new PreciseMask($imgWidth, $imgHeight, $this->metrics)
+            : new QuadTreeMask($imgWidth, $imgHeight)
+        ;
     }
 
     /**
@@ -60,10 +70,9 @@ class Usher
      * @param string $font
      * @param int $fontSize
      * @param int $angle
-     * @param bool $precise
      * @return bool|Box
      */
-    public function getPlace($word, $font, $fontSize, $angle, $precise = false)
+    public function getPlace($word, $font, $fontSize, $angle)
     {
         $this->logger->log(
             sprintf(
@@ -88,53 +97,13 @@ class Usher
             return false;
         }
 
-        if ($precise) {
-            $this->addWordToMask($word, $place, $font, $fontSize, $angle);
+        if ($this->precise) {
+            $this->mask->addWordToMask($word, $place, $font, $fontSize, $angle);
             return $place;
         }
 
         $this->mask->add(new Point(0, 0), $place);
         return $place;
-    }
-
-    /**
-     * @param string $word
-     * @param Box $place
-     * @param string $font
-     * @param int $size
-     * @param int $angle
-     */
-    public function addWordToMask($word, Box $place, $font, $size, $angle)
-    {
-        $base = $this->metrics->calculateSize($word, $font, $size, $angle);
-        foreach (str_split($word) as $letter) {
-            $box = $this->metrics->calculateSize($letter, $font, $size);
-
-            if ($angle === 0) {
-                $newPos = new Point($place->getX(), $place->getY() + ($base->getHeight() - $box->getHeight()));
-                $this->mask->add($newPos, $box, $angle);
-                $place = $place->move($box->getWidth(), 0);
-                continue;
-            }
-
-            // Invert width and height
-            $box = new Box(0, 0, $box->getHeight(), $box->getWidth());
-
-            if ($place->getY() + ($base->getHeight() - $box->getHeight()) < 0) {
-                continue;
-            }
-
-            if ($place->getX() + ($base->getWidth() - $box->getWidth()) < 0) {
-                continue;
-            }
-
-            $newPos = new Point(
-                $place->getX() + ($base->getWidth() - $box->getWidth()),
-                $place->getY() + ($base->getHeight() - $box->getHeight())
-            );
-            $this->mask->add($newPos, $box);
-            $place = $place->move(0, -$box->getHeight());
-        }
     }
 
     /**
