@@ -19,6 +19,13 @@ use PHPUnit\Framework\TestCase;
 
 class DrawingTest extends TestCase
 {
+    public function setUp()
+    {
+        if (array_key_exists('CI', $_ENV) && $_ENV['CI']) {
+            $this->markTestSkipped('Avoid risky tests in CI env');
+        }
+    }
+
     /**
      * Illustrate the difficulty to properly draw a bounding box around rotated text with Imagine.
      */
