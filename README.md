@@ -1,3 +1,5 @@
+There is now a Rust version of this library [here](https://codeberg.org/sixty-nine/rust-word-cloud)
+
 # php-cloud-lib
 
 [![Build Status](https://secure.travis-ci.org/sixty-nine/php-cloud-lib.png)](http://travis-ci.org/sixty-nine/php-cloud-lib)
