@@ -146,10 +146,10 @@ class WordsList
             $attr2 = $b->$method();
 
             if ($sortOrder === self::SORT_ASC) {
-                return $attr1 > $attr2;
+                return $attr1 > $attr2 ? -1 : 1;
             }
 
-            return $attr1 < $attr2;
+            return $attr1 < $attr2 ? -1 : 1;
         };
 
 
