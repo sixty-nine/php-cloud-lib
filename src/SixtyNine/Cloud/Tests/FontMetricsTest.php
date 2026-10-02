@@ -15,8 +15,8 @@ class FontMetricsTest extends TestCase
 
         $size1 = $calc->calculateSize('abc', 'Arial.ttf', 10);
         $size2 = $calc->calculateSize('abc', 'Arial.ttf', 12);
-        $size3 = $calc->calculateSize('abc', 'Arial.ttf', 1);
-        $size4 = $calc->calculateSize('a', 'Arial.ttf', 1);
+        $size3 = $calc->calculateSize('abc', 'Arial.ttf', 2);
+        $size4 = $calc->calculateSize('a', 'Arial.ttf', 2);
 
         $this->assertTrue($size1->getWidth() < $size2->getWidth());
         $this->assertTrue($size1->getHeight() < $size2->getHeight());
@@ -33,8 +33,8 @@ class FontMetricsTest extends TestCase
 
         $size1 = $calc->calculateSize('abc', 'Arial.ttf', 10, 270);
         $size2 = $calc->calculateSize('abc', 'Arial.ttf', 12, 270);
-        $size3 = $calc->calculateSize('abc', 'Arial.ttf', 1, 270);
-        $size4 = $calc->calculateSize('a', 'Arial.ttf', 1, 270);
+        $size3 = $calc->calculateSize('abc', 'Arial.ttf', 2, 270);
+        $size4 = $calc->calculateSize('a', 'Arial.ttf', 2, 270);
 
         $this->assertTrue($size1->getWidth() < $size2->getWidth());
         $this->assertTrue($size1->getHeight() < $size2->getHeight());
