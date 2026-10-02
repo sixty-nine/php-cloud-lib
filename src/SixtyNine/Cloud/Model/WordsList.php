@@ -17,6 +17,9 @@ class WordsList
     const SORT_ASC = 'asc';
     const SORT_DESC = 'desc';
 
+    /** Sent with importUrl(), many sites (e.g. Wikipedia) reject requests without one */
+    const USER_AGENT = 'php-cloud-lib (https://github.com/sixty-nine/php-cloud-lib)';
+
     /**
      * @var string
      * @JMS\Type("string")
@@ -270,7 +273,10 @@ class WordsList
      */
     public function importUrl($url, ?Filters $filters = null, $maxWords = 100)
     {
-        $this->importHtml(file_get_contents($url), $filters, $maxWords);
+        $context = stream_context_create(array(
+            'http' => array('user_agent' => self::USER_AGENT),
+        ));
+        $this->importHtml(file_get_contents($url, false, $context), $filters, $maxWords);
     }
 
     /**
