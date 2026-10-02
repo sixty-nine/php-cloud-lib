@@ -140,7 +140,7 @@ class CommandsHelper
     protected function render(
         CloudBuilder $cloudBuilder,
         FontsFactory $factory,
-        PlacerInterface $placer = null,
+        ?PlacerInterface $placer = null,
         $renderBoxes = false,
         $renderMask = false
     ) {

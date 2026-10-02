@@ -195,7 +195,7 @@ class WordsList
      * @param Filters $filters
      * @param int $maxWords
      */
-    public function importWords($words, Filters $filters = null, $maxWords = 100)
+    public function importWords($words, ?Filters $filters = null, $maxWords = 100)
     {
         $array = preg_split("/[\n\r\t ]+/", $words);
 
@@ -211,7 +211,7 @@ class WordsList
      * @param string $word
      * @param Filters $filters
      */
-    public function importWord($word, Filters $filters = null)
+    public function importWord($word, ?Filters $filters = null)
     {
         if ($filters) {
             $word = $filters->apply($word);
@@ -242,7 +242,7 @@ class WordsList
      * @param Filters $filters
      * @param int $maxWords
      */
-    public function importHtml($html, Filters $filters = null, $maxWords = 100)
+    public function importHtml($html, ?Filters $filters = null, $maxWords = 100)
     {
         if (!$html) {
             return;
@@ -268,7 +268,7 @@ class WordsList
      * @param Filters $filters
      * @param int $maxWords
      */
-    public function importUrl($url, Filters $filters = null, $maxWords = 100)
+    public function importUrl($url, ?Filters $filters = null, $maxWords = 100)
     {
         $this->importHtml(file_get_contents($url), $filters, $maxWords);
     }
