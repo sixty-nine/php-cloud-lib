@@ -25,8 +25,6 @@ $commands = array(
     new Command\DebugUsherCommand(),
 );
 
-foreach ($commands as $command) {
-    $application->add($command);
-}
+$application->addCommands($commands);
 
 $application->run();

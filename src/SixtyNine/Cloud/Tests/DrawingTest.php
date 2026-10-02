@@ -4,7 +4,7 @@ namespace SixtyNine\Cloud\Tests\Builder;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box as ImagineBox;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\RGB;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use Imagine\Image\PointInterface;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class DrawingTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (array_key_exists('CI', $_ENV) && $_ENV['CI']) {
             $this->markTestSkipped('Avoid risky tests in CI env');
@@ -32,7 +32,7 @@ class DrawingTest extends TestCase
     public function testDrawing()
     {
         $imagine = new Imagine();
-        $image = $imagine->create(new ImagineBox(400, 400), new Color('#000000'));
+        $image = $imagine->create(new ImagineBox(400, 400), (new RGB())->color('#000000'));
 
         $text = 'Foobar';
         $size = 80;
@@ -216,7 +216,7 @@ class DrawingTest extends TestCase
             $this->createPoint($x + $width, $y + $height),
             $this->createPoint($x, $y + $height),
         );
-        $image->draw()->polygon($points, new Color($color));
+        $image->draw()->polygon($points, (new RGB())->color($color));
     }
 
     /**

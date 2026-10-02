@@ -5,7 +5,6 @@ namespace SixtyNine\Cloud\Command;
 use Imagine\Gd\Image;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Imagine\Image\Color;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;
 use SixtyNine\Cloud\Model\Cloud;
@@ -19,7 +18,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DebugUsherCommand extends Command
 {
     /** {@inheritdoc} */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('debug:usher')
@@ -35,7 +34,7 @@ class DebugUsherCommand extends Command
     }
 
     /** {@inheritdoc} */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $cloud = (new Cloud())
             ->setWidth($input->getOption('width'))
@@ -55,5 +54,7 @@ class DebugUsherCommand extends Command
         $renderer->renderUsher($placer, $input->getOption('color'));
 
         $helper->output($renderer->getImage(), $input->getOption('format'), $input->getOption('save-to-file'));
+
+        return 0;
     }
 }

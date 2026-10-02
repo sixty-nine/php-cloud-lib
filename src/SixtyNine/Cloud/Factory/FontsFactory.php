@@ -5,7 +5,7 @@ namespace SixtyNine\Cloud\Factory;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\RGB;
 use Imagine\Image\Point;
 use Imagine\Gd\Font as ImagineFont;
 use SixtyNine\Cloud\Model\Font;
@@ -93,7 +93,7 @@ class FontsFactory
     public function getImagineFont($name, $size, $color = '#000000')
     {
         $font = $this->getFont($name);
-        return new ImagineFont($font->getFile(), $size, new Color($color));
+        return new ImagineFont($font->getFile(), $size, (new RGB())->color($color));
     }
 
     /**

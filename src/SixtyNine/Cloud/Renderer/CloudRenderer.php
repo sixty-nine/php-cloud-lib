@@ -5,7 +5,7 @@ namespace SixtyNine\Cloud\Renderer;
 
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
-use Imagine\Image\Color;
+use Imagine\Image\Palette\RGB;
 use Imagine\Image\ImageInterface;
 use Imagine\Image\Point;
 use SixtyNine\Cloud\Drawer\Drawer;
@@ -84,7 +84,7 @@ class CloudRenderer
     ) {
         $i = 0;
         $cur = $placer->getFirstPlaceToTry();
-        $color = new Color($color);
+        $color = (new RGB())->color($color);
 
         while($cur) {
 

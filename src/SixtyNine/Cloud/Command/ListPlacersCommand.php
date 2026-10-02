@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListPlacersCommand extends Command
 {
     /** {@inheritdoc} */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('list:placers')
@@ -21,17 +21,19 @@ class ListPlacersCommand extends Command
     }
 
     /** {@inheritdoc} */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $placers = PlacerFactory::getInstance()->getPlacersNames();
         $output->write('Available words placers: ');
 
         if (!count($placers)) {
             $output->writeln('none');
-            return;
+            return 0;
         }
 
 
         $output->writeln(join(', ', $placers));
+
+        return 0;
     }
 }

@@ -37,7 +37,7 @@ class FiltersBuilderTest extends TestCase
         ;
         $this->assertInstanceOf(Filters::class, $filters);
         $this->assertInstanceOf(ChangeCase::class, $filters->getFilters()[0]);
-        $this->assertAttributeEquals('uppercase', 'case', $filters->getFilters()[0]);
+        $this->assertEquals('uppercase', $this->readProperty($filters->getFilters()[0], 'case'));
     }
 
     public function testRemoveNumbers()
@@ -88,7 +88,21 @@ class FiltersBuilderTest extends TestCase
         ;
         $this->assertInstanceOf(Filters::class, $filters);
         $this->assertInstanceOf(RemoveByLength::class, $filters->getFilters()[0]);
-        $this->assertAttributeEquals(5, 'minLength', $filters->getFilters()[0]);
-        $this->assertAttributeEquals(15, 'maxLength', $filters->getFilters()[0]);
+        $this->assertEquals(5, $this->readProperty($filters->getFilters()[0], 'minLength'));
+        $this->assertEquals(15, $this->readProperty($filters->getFilters()[0], 'maxLength'));
+    }
+
+    /**
+     * Replacement for assertAttributeEquals(), which was removed in PHPUnit 9.
+     *
+     * @param object $object
+     * @param string $property
+     * @return mixed
+     */
+    protected function readProperty($object, $property)
+    {
+        $reflection = new \ReflectionProperty($object, $property);
+        $reflection->setAccessible(true);
+        return $reflection->getValue($object);
     }
 }

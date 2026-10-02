@@ -2,7 +2,6 @@
 namespace SixtyNine\Cloud\Builder;
 
 use Imagine\Gd\Font;
-use Imagine\Image\Color;
 use Imagine\Image\Point;
 use SixtyNine\Cloud\Factory\FontsFactory;
 use SixtyNine\Cloud\Factory\PlacerFactory;

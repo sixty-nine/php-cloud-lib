@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListPalettesCommand extends Command
 {
     /** {@inheritdoc} */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('list:palettes')
@@ -22,7 +22,7 @@ class ListPalettesCommand extends Command
     }
 
     /** {@inheritdoc} */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $palettesFile = __DIR__ . '/../Resources/palettes.yml';
         if ($input->getOption('palettes-file')) {
@@ -35,11 +35,13 @@ class ListPalettesCommand extends Command
 
         if (!count($palettes)) {
             $output->writeln('  No palette found');
-            return;
+            return 0;
         }
 
         foreach ($palettes as $palette) {
             $output->writeln(sprintf('  - %s', $palette->getName()));
         }
+
+        return 0;
     }
 }

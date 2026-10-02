@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BuildFromUrlCommand extends BaseCloudCommand
 {
     /** {@inheritdoc} */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this
@@ -21,10 +21,12 @@ class BuildFromUrlCommand extends BaseCloudCommand
     }
 
     /** {@inheritdoc} */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = new CommandsHelper();
         $timing = $helper->createCloud('from-url', $input);
         $output->writeln(sprintf('Cloud generated in %s seconds', $timing->getDuration() / 1000));
+
+        return 0;
     }
 }

@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ListFontsCommand extends Command
 {
     /** {@inheritdoc} */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('list:fonts')
@@ -22,7 +22,7 @@ class ListFontsCommand extends Command
     }
 
     /** {@inheritdoc} */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $fontsPath = $input->getOption('fonts-path')
             ? realpath($input->getOption('fonts-path'))
@@ -35,11 +35,13 @@ class ListFontsCommand extends Command
 
         if (!count($fonts)) {
             $output->writeln('  No fonts found');
-            return;
+            return 0;
         }
 
         foreach ($fonts as $name) {
             $output->writeln(sprintf('  - %s', $name));
         }
+
+        return 0;
     }
 }
