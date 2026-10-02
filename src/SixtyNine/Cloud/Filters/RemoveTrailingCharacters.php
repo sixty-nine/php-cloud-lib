@@ -20,12 +20,13 @@ class RemoveTrailingCharacters extends AbstractFilter implements FilterInterface
     /** {@inheritdoc} */
     public function filterWord($word)
     {
-        foreach($this->punctuation as $p) {
-            if(substr($word, -1) == $p) {
-                $word = substr($word, 0, -1);
-            }
-        }
+        $punctuation = implode('|', array_map(function ($p) {
+            return preg_quote($p, '/');
+        }, $this->punctuation));
 
-        return $word;
+        // null on invalid UTF-8: keep the word as it is
+        $filtered = preg_replace('/(?:' . $punctuation . ')+$/u', '', $word);
+
+        return $filtered === null ? $word : $filtered;
     }
 }
