@@ -20,6 +20,22 @@ class RemoveByLength extends AbstractFilter implements FilterInterface
         $this->maxLength = $maxLength ? (int)$maxLength : false;
     }
 
+    /**
+     * @return bool|int The minimal length or false
+     */
+    public function getMinLength()
+    {
+        return $this->minLength;
+    }
+
+    /**
+     * @return bool|int The maximal length or false
+     */
+    public function getMaxLength()
+    {
+        return $this->maxLength;
+    }
+
     /** {@inheritdoc} */
     public function keepWord($word)
     {

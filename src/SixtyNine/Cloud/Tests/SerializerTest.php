@@ -18,6 +18,15 @@ use PHPUnit\Framework\TestCase;
 
 class SerializerTest extends TestCase
 {
+    public function setUp(): void
+    {
+        // jms/serializer 1.x does not work with PHP 8.1+, and upgrading it
+        // breaks deserialization (arrays are returned instead of objects).
+        if (PHP_VERSION_ID >= 80100) {
+            $this->markTestSkipped('jms/serializer 1.x is not compatible with PHP 8.1+');
+        }
+    }
+
     public function testSaveLoadList()
     {
         $colorGenerator = new RandomColorGenerator(PalettesBuilder::create()->getRandomPalette());

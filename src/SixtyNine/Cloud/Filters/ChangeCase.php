@@ -22,6 +22,14 @@ class ChangeCase extends AbstractFilter implements FilterInterface
         $this->case = $case;
     }
 
+    /**
+     * @return string
+     */
+    public function getCase()
+    {
+        return $this->case;
+    }
+
     /** {@inheritdoc} */
     public function filterWord($word)
     {
