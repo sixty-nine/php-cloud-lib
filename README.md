@@ -1,4 +1,6 @@
-There is now a Rust version of this library [here](https://codeberg.org/sixty-nine/rust-word-cloud)
+❗ There is now a Rust version of this library [here](https://codeberg.org/sixty-nine/rust-word-cloud).
+
+⚠️ I don't maintain this package anymore, it's working and I will accept PR, but I won't work on it anymore.
 
 # php-cloud-lib
 
